@@ -1,3 +1,14 @@
+# User Defined
+*.tar.gz
+*,tar
+*.zip
+
+*variables*
+*.pb
+.vscode
+.mypy_cache
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

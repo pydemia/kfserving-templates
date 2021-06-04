@@ -1,0 +1,58 @@
+# ---
+# apiVersion: "serving.kubeflow.org/v1beta1"
+# kind: "InferenceService"
+# metadata:
+#   name: "custom-simple"
+# spec:
+#   predictor:
+#     minReplicas: 1
+#     containers:
+#     - image: codait/max-object-detector
+#       ports:
+#         - containerPort: 5000
+#           protocol: TCP
+# ---
+  
+# apiVersion: serving.kubeflow.org/v1beta1
+# kind: InferenceService
+# metadata:
+#   name: torchserve-transformer
+# spec:
+#   transformer:
+#     containers:
+#     - image: kfserving/torchserve-image-transformer:latest
+#       name: transformer-container
+#       env:
+#         - name: STORAGE_URI
+#           value: gs://kfserving-examples/models/torchserve/image_classifier
+#             #value: pvc://model-pv-claim
+#   predictor:
+#     pytorch:
+#       storageUri: gs://kfserving-examples/models/torchserve/image_classifier
+#       #storageUri: pvc://model-pv-claim
+---
+apiVersion: serving.kubeflow.org/v1beta1
+kind: InferenceService
+metadata:
+  name: sklearnserver-test
+spec:
+  predictor:
+    containers:
+    - image: docker.io/pydemia/sklearnserver:0.1.0
+      name: kfserving-container
+      # ports:
+      #   - containerPort: 8080
+      #     protocol: TCP
+      # # Only a single port is allowed
+      env:
+        - name: MODEL_NAME
+          value: sklearnserver-test
+        - name: STORAGE_URI
+          value: gs://airuntime-demo/templates/sklearn/examples
+      # args:
+      #   - --max_buffer_size=104857600
+      # ports:
+      #   - containerPort: 8080
+      #     protocol: TCP
+      # Only a single port is allowed
+      # v1beta1Controllers  fails to reconcile predictor: admission webhook "validation.webhook.serving.knative.dev" denied the request: validation failed: More than one container port is set: spec.template.spec.containers[0].ports

@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# cd "${0%/*}"
+HTTP_PORT=${HTTP_PORT:-8080}
+GRPC_PORT=${GRPC_PORT:-8080}
+TRITON_HTTP_PORT=${TRITON_HTTP_PORT:-18080}
+TRITON_GRPC_PORT=${TRITON_GRPC_PORT:-18081}
+
+mv /models/archived $MODEL_DIR/$MODEL_NAME
+
+/opt/tritonserver/nvidia_entrypoint.sh && tritonserver \
+  --model-store=$MODEL_DIR \
+  --grpc-port=${TRITON_GRPC_PORT:-18081} \
+  --http-port=${TRITON_HTTP_PORT:-18080} \
+  --allow-grpc=true \
+  --allow-http=true \
+  --strict-model-config=false \
+  --strict-readiness=true \
+  --log-info=true \
+  $@ & \
+python3 -m tritonserver.inferencer \
+  --model_name=$MODEL_NAME \
+  --model_dir=$MODEL_DIR \
+  --http_port=$HTTP_PORT \
+  --grpc_port=$GRPC_PORT
+
+# without `config.pbtxt`: --strict-model-config = false & savedmodel
+
+  # tritonserver \
+  # --model-repository=$MODEL_DIR \
+  # --grpc-port=$TRITON_GRPC_PORT \
+  # --http-port=$TRITON_HTTP_PORT \
+  # --allow-grpc=true \
+  # --allow-http=true \
+  # $@
