@@ -1,0 +1,15 @@
+# The pip syntax below allows us to not repeat
+# In order to not maintain two separate dependency
+# lists in setup.py vs requirements.txt
+# See https://caremad.io/posts/2013/07/setup-vs-requirement/
+
+--index-url https://pypi.python.org/simple/
+
+# -e .
+
+numpy
+pandas
+scikit-learn == 0.23.2
+
+git+https://github.com/skcc-asset-platform/pycaret#egg=pycaret
+git+https://github.com/skcc-asset-platform/accutuning_helpers@v1.0.18#egg=accutuning_helpers

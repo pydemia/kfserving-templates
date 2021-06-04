@@ -12,18 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-from kfserving.kfmodel_repository import KFModelRepository, MODEL_MOUNT_DIRS
-from .model import ServingModel
-
-
-class ModelRepository(KFModelRepository):
-
-    def __init__(self, model_dir: str = MODEL_MOUNT_DIRS):
-        super().__init__(model_dir)
-
-    async def load(self, name: str) -> bool:
-        model = ServingModel(name, os.path.join(self.models_dir, name))
-        if model.load():
-            self.update(model)
-        return model.ready
+from pysparkserver.inferencer.model import ServingModel
+from pysparkserver.inferencer.model_repository import ModelRepository

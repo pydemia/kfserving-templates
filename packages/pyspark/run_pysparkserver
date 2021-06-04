@@ -1,0 +1,11 @@
+#!/bin/bash
+
+
+# pyspark 
+
+python3 -m pysparkserver.inferencer \
+  --model_name=$MODEL_NAME \
+  --model_dir=$MODEL_DIR \
+  --http_port=$HTTP_PORT \
+  --grpc_port=$GRPC_PORT \
+  $@

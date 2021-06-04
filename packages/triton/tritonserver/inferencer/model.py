@@ -29,6 +29,8 @@ import tritonclient.http as httpclient
 
 
 log = logging.getLogger(__name__)
+
+
 class ServingModel(kfserving.KFModel):  # pylint:disable=c-extension-no-member
     def __init__(self, name: str, model_dir: str):
         super().__init__(name)

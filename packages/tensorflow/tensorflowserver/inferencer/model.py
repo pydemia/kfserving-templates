@@ -16,12 +16,18 @@ import kfserving
 import joblib
 import numpy as np
 import os
-from typing import Dict
+from typing import Union, Dict
+from .utils import change_ndarray_tolist
+import logging
+
+import io
+import zlib
+import pickle
 
 from ..trainer.model import TensorflowModel
 
-MODEL_BASENAME = "model"
-MODEL_EXTENSIONS = [".joblib", ".pkl", ".pickle"]
+
+log = logging.getLogger(__name__)
 
 
 class ServingModel(kfserving.KFModel):  # pylint:disable=c-extension-no-member
@@ -42,19 +48,47 @@ class ServingModel(kfserving.KFModel):  # pylint:disable=c-extension-no-member
         return self.ready
 
 
-    def predict(self, request: Dict) -> Dict:
+    def _predict_from_json(self, request: Dict) -> Dict:
         instances = request["instances"]
-        try:
-            inputs = np.array(instances)
-        except Exception as e:
-            raise Exception(
-                "Failed to initialize NumPy array from inputs: %s, %s" % (e, instances))
-        try:
 
-            result = self._model.predict(inputs).tolist()
+        try:
+            predictions = self._model.predict(instances).tolist()
             return {
-                "predictions": result,
+                "predictions": predictions,
                 "model_version": os.getenv("MODEL_VERSION", "1")
             }
         except Exception as e:
             raise Exception("Failed to predict %s" % e)
+
+    def _predict_from_bytes(self, request: bytes) -> Dict:
+        log.info(type(request))
+
+        (_start_boundary, content_disposition,
+         data_bytes, *__) = request.replace(b'\r\n\r\n', b'\r\n').split(b'\r\n')
+        *_, filename = content_disposition.split(b';')
+
+        filename = filename.decode('utf8').replace("'", "").replace('"', '')
+        if filename.endswith('npz') or filename.endswith('npy'):
+            npz = np.load(io.BytesIO(data_bytes), allow_pickle=True)
+            instances = npz[npz.files[0]]
+        elif filename.endswith('pkl'):
+            instances = pickle.load(io.BytesIO(data_bytes))
+        else:
+            raise Exception("Unsupported or invalid File Format: 'npz', 'npy' or 'pkl' format is avaliable.")
+
+        try:
+            predictions = self._model.predict(instances).tolist()
+            return {
+                "predictions": predictions,
+                "model_version": os.getenv("MODEL_VERSION", "1")
+            }
+        except Exception as e:
+            raise Exception("Failed to predict %s" % e)
+
+    def predict(self, request: Union[Dict, bytes]) -> Dict:
+        if isinstance(request, dict):
+            return self._predict_from_json(request)
+        elif isinstance(request, bytes):
+            return self._predict_from_bytes(request)
+        else:
+            raise Exception("Unsupported 'Content-Type': 'json' or 'multipart/form-data is available.")

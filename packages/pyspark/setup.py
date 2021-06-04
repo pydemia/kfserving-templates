@@ -16,7 +16,7 @@ from setuptools import setup, find_packages
 import datetime as dt
 
 
-package_nm = 'sklearnserver'
+package_nm = 'pysparkserver'
 __version__ = "0.1.0"
 
 base_requires = [
@@ -76,6 +76,22 @@ sklearn_requires = [
     "joblib >= 0.13.0"
 ]
 
+accutuning_requires = [
+    # "scikit-learn == 0.20.3",
+    "scikit-learn >= 0.20.3",
+    "joblib >= 0.13.0"
+]
+
+pipeline_requires = [
+    "pandas==1.0.4",
+    "numpy==1.18.2",
+    "numba==0.50.1",
+    "pandas-profiling==2.7.1",       # 시각화 기능 사용시 (v2.0)
+    "imagehash==4.1.0",              # 시각화 기능 사용시 (v2.0)
+    "boto3==1.13.26",                # S3 불러오기/저장하기 사용시
+    "pygrok==1.0.0",
+]
+
 xgb_requires = [
     "xgboost == 0.82",
     "scikit-learn == 0.20.3",
@@ -95,6 +111,9 @@ __version__ = '{__version__}'
     f.write(version_py_module)
 
 
+with open('README.md', 'r', encoding='utf8') as f:
+    long_desc = f.read()
+
 setup(
     name=package_nm,
     version=__version__,
@@ -102,12 +121,12 @@ setup(
     license='https://github.com/kubeflow/kfserving/LICENSE',
     url='',
     description='Model Server implementation for AI Runtime.',
-    long_description=open('README.md').read(),
+    long_description=long_desc,
     python_requires='>3.4',
     packages=find_packages(
         exclude=['contrib', 'docs', 'tests'],
     ),
-    install_requires=base_requires + sklearn_requires,
+    install_requires=base_requires + pipeline_requires + accutuning_requires,
     tests_require=tests_require,
     extras_require={'test': tests_require}
 )

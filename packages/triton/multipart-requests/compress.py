@@ -9,6 +9,9 @@ from tempfile import TemporaryFile
 
 import requests
 
+with open("input.json", "r") as f:
+    original = json.load(f)
+
 with open("input-large.json", "r") as f:
     original = json.load(f)
 
@@ -98,3 +101,34 @@ files = {
     "instances": (filename, ndarray)
 }
 requests.post(url, headers=header, files=files)
+
+# FILE #############################################
+with open("input.json", "r") as f:
+    original = json.load(f)
+
+ndarray = np.array(original["instances"])
+
+url = "http://localhost:8080/v2/models/test/infer"
+header = {
+    "ce-specversion": "1.0",
+    "ce-source": "none",
+    "ce-type": "none",
+    "ce-id": "none",
+    "Content-Type": "multipart/form-data",
+}
+filename = "instances.npz"
+files = {
+    "instances": (filename, save_np_as_filestream(ndarray))
+}
+requests.post(url, headers=header, files=files).json()
+
+# JSON #############################################
+
+url = "http://localhost:8080/v2/models/test/infer"
+header = {
+    "Content-Type": "application/json",
+}
+body = {
+    "instances": ndarray.tolist()
+}
+requests.post(url, headers=header, json=body).json()

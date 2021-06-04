@@ -82,14 +82,14 @@ class TensorflowModel(BaseModel):
         # Case 1: `prep_func` is made for the batch `X`
         X = prep_func(X)
         # Case 2: `prep_func` is made for each input in `X`
-        X = np.array([prep_func(x) for x in X])
+        # X = np.array([prep_func(x) for x in X])
         return X
 
     def postprocess(self, y_hat: np.ndarray) -> np.ndarray:
         # Case 1: `post_func` is made for the batch `y_hat`
         y_hat = post_func(y_hat)
         # Case 2: `post_func` is made for each output in `y_hat`
-        y_hat = np.array([post_func(yh) for yh in y_hat])
+        # y_hat = np.array([post_func(yh) for yh in y_hat])
         return y_hat
 
     def train(self, training_dataset,
