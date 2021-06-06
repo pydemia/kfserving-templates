@@ -14,26 +14,11 @@
 
 # ENTRYPOINT ["./run_modelserver"]
 
-# FROM nvcr.io/nvidia/tensorflow:20.03-tf2-py3
-FROM tensorflow/tensorflow:2.2.0-gpu
+FROM nvcr.io/nvidia/tensorflow:21.04-tf2-py3
 LABEL maintainer="pydemia@gmail.com"
 
 RUN apt-get update && \
-    apt-get install --no-install-recommends -y \
-    build-essential \
-    software-properties-common \
-    git curl vim htop
-
-# ENV CONDA_DIR="/opt/conda"
-# # Miniconda3-py38_4.8.3-Linux-x86_64.sh
-# RUN curl -fsSL https://repo.anaconda.com/miniconda/Miniconda3-py38_4.8.3-Linux-x86_64.sh -o miniconda.sh \
-#     && (echo "\n";echo yes; echo $CONDA_DIR; echo yes) | bash -f miniconda.sh \
-#     && rm miniconda.sh
-# # Miniconda3-py39_4.9.2-Linux-x86_64.sh
-# # RUN curl -fsSL https://repo.anaconda.com/miniconda/Miniconda3-py39_4.9.2-Linux-x86_64.sh -o miniconda.sh \
-# #     && (echo "\n";echo yes; echo $CONDA_DIR; echo yes) | bash -f miniconda.sh \
-# #     && rm miniconda.sh
-# ENV PATH="${CONDA_DIR}/bin:${PATH}"
+    apt-get install --no-install-recommends -y git
 
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONPATH=/workdir:${PYTHONPATH}
@@ -61,7 +46,6 @@ RUN chmod +x /usr/local/bin/run_tfserver
 RUN pip install --upgrade pip && \
     pip install -e . && \
     pip install -r ./requirements.txt --no-cache-dir
-    # pip install tensorflow-gpu==2.2.0
 
 RUN rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 

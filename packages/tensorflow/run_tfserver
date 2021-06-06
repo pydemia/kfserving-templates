@@ -5,7 +5,7 @@ HTTP_PORT=${HTTP_PORT:-8080}
 GRPC_PORT=${GRPC_PORT:-8080}
 MODEL_DIR=${MODEL_DIR:-/models}
 
-python3 -m tfserver.inferencer \
+python3 -m tensorflowserver.inferencer \
   --model_name=$MODEL_NAME \
   --model_dir=$MODEL_DIR \
   --http_port=$HTTP_PORT \

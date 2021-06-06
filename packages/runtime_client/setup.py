@@ -16,12 +16,14 @@ from setuptools import setup, find_packages
 import datetime as dt
 
 
-package_nm = 'tensorflowserver'
+package_nm = 'runtime_client'
 __version__ = "0.1.0"
 
 base_requires = [
     "argparse >= 1.4.0",
-    "kfserving>=0.5.1",
+    # "kfserving>=0.5.1",
+    "dill >= 0.3.3",
+    "joblib",
     "numpy",
     "pandas",
 ]
@@ -33,62 +35,11 @@ tests_require = [
     'mypy'
 ]
 
-aix_requires = [
-    "argparse >= 1.4.0",
-    "aix360 >= 0.1.0",
-    "lime >= 0.1.1.37",
-    "nest_asyncio>=1.4.0"
+client_requires = [
+    "requests >= 2.25.1",
+    "requests-toolbelt >= 0.9.1",
 ]
 
-alibi_requires = [
-    "pandas>=0.24.2",
-    "nest_asyncio>=1.4.0",
-    "alibi==0.5.5",
-    "scikit-learn == 0.20.3",
-    "argparse>=1.4.0",
-    "requests>=2.22.0",
-    "joblib>=0.13.2",
-    "dill>=0.3.0",
-    "grpcio>=1.22.0",
-    "xgboost==1.0.2",
-    "shap==0.36.0",
-    "numpy<1.19.0"
-]
-
-lgb_requires = [
-    "kfserving>=0.4.0",
-    "lightgbm == 2.3.1",
-    "pandas == 0.25.3",
-    "argparse >= 1.4.0"
-]
-
-pmml_requires = [
-    "pypmml == 0.9.7",
-]
-
-pytorch_requires = [
-    "torch >= 1.0.0",
-    "torchvision >= 0.2.0"
-]
-
-sklearn_requires = [
-    # "scikit-learn == 0.20.3",
-    "scikit-learn >= 0.20.3",
-    "joblib >= 0.13.0"
-]
-
-tensorflow_requires = [
-    # "tensorflow-gpu >= 1.14",
-    # "tensorboard",
-]
-
-xgb_requires = [
-    "xgboost == 0.82",
-    "scikit-learn == 0.20.3",
-]
-
-triton_requires = [
-]
 
 with open(f'{package_nm}/__version__.py', 'w') as f:
     version_py_module = f'''#-*- coding: utf-8 -*-
@@ -115,7 +66,7 @@ setup(
     packages=find_packages(
         exclude=['contrib', 'docs', 'tests'],
     ),
-    install_requires=base_requires + tensorflow_requires,
+    install_requires=base_requires + client_requires,
     tests_require=tests_require,
     extras_require={'test': tests_require}
 )

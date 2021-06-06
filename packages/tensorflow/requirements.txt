@@ -6,4 +6,9 @@
 --index-url https://pypi.python.org/simple/
 
 # -e .
-tensorflow-gpu >= 1.14.0
+kfserving ==0.5.1
+numpy
+scipy
+pandas >= 1.0.0
+# dataclass  # for python3.6, default in 3.7 and over
+# tensorflow-gpu >= 1.14.0
