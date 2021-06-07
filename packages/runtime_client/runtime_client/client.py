@@ -59,7 +59,7 @@ class KFServingClient:
                 headers["Content-Type"] = "application/json"
                 r = requests.post(
                     url,
-                    data=data,
+                    data=json.dumps(data),
                     headers=headers,
                 )
             elif isinstance(data, np.ndarray):
@@ -106,7 +106,7 @@ class RuntimeClient:
         _url_format = {
             "live": "{domain}/ifservice/ready/{model_id}",
             "infer_json": "{domain}/ifservice/predict2/{model_id}",
-            "infer_data": "{domain}/ifservice/infer/{model_id}",
+            "infer_byte": "{domain}/ifservice/infer/{model_id}",
             "explain": "{domain}/ifservice/explain/{model_id}",
         }
         self.url_format = namedtuple(
@@ -130,13 +130,13 @@ class RuntimeClient:
         else:
             if isinstance(data, Dict):
                 headers["Content-Type"] = "application/json"
-                url = self.url_format.infer.format(
+                url = self.url_format.infer_json.format(
                     domain=self.domain,
                     model_id=model_id,
                 )
                 r = requests.post(
                     url,
-                    data=data,
+                    data=json.dumps(data),
                     headers=headers,
                 )
             elif isinstance(data, np.ndarray):
@@ -151,7 +151,7 @@ class RuntimeClient:
                     )
 
                     headers["Content-Type"] = m.content_type
-                    url = self.url_format.infer.format(
+                    url = self.url_format.infer_byte.format(
                         domain=self.domain,
                         model_id=model_id,
                     )
