@@ -3,18 +3,20 @@
 # cd "${0%/*}"
 HTTP_PORT=${HTTP_PORT:-8080}
 GRPC_PORT=${GRPC_PORT:-8080}
-TRITON_HTTP_PORT=${TRITON_HTTP_PORT:-18080}
-TRITON_GRPC_PORT=${TRITON_GRPC_PORT:-18081}
+TRITON_HTTP_PORT=${TRITON_HTTP_PORT:-8000}
+TRITON_GRPC_PORT=${TRITON_GRPC_PORT:-8001}
+TRITON_METRIC_PORT=${TRITON_METRIC_PORT:-8002}
 
 mv /models/archived $MODEL_DIR/$MODEL_NAME
 
 /opt/tritonserver/nvidia_entrypoint.sh && tritonserver \
   --model-store=$MODEL_DIR \
-  --grpc-port=${TRITON_GRPC_PORT:-18081} \
-  --http-port=${TRITON_HTTP_PORT:-18080} \
+  --http-port=${TRITON_HTTP_PORT:-8000} \
+  --grpc-port=${TRITON_GRPC_PORT:-8001} \
   --allow-grpc=true \
   --allow-http=true \
-  --strict-model-config=false \
+  --allow-metrics=true \
+  --allow-gpu-metrics=true \
   --strict-readiness=true \
   --log-info=true \
   $@ & \
@@ -33,3 +35,5 @@ python3 -m tritonserver.inferencer \
   # --allow-grpc=true \
   # --allow-http=true \
   # $@
+
+"$@"

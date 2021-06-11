@@ -273,5 +273,5 @@ https://github.com/triton-inference-server/server/blob/829d4ba2d007fdb9ae71d0640
 ```bash
 docker build . -f tritonserver-base.Dockerfile -t pydemia/tritonserver-base:triton-20.08-py38 > build-tritonserver-base.log 2>&1 && docker push pydemia/tritonserver-base:triton-20.08-py38 \
 && docker save -o pydemia/tritonserver-base:triton-20.08-py38 -o pydemia--tritonserver-base:triton-20.08-py38.tar.gz \
-&& gsutil cp ./pydemia--tritonserver-base:triton-20.08-py38.tar.gz gs://aiip-runtime-installer/install-offline/pydemia--tritonserver-base:triton-20.08-py38.tar.gz &
+&& gsutil -m cp ./pydemia--tritonserver-base:triton-20.08-py38.tar.gz gs://aiip-runtime-installer/install-offline/pydemia--tritonserver-base:triton-20.08-py38.tar.gz &
 ```

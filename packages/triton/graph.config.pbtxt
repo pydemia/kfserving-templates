@@ -1,0 +1,23 @@
+feed {
+  id {
+    node_name: "input_2"
+  }
+  shape {
+    dim {
+      size: 1
+    }
+    dim {
+      size: 10
+    }
+  }
+}
+fetch {
+  id {
+    node_name: "dense_2_1/Identity"
+  }
+}
+fetch {
+  id {
+    node_name: "dense_2_1/Identity"
+  }
+}

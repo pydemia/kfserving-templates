@@ -1,0 +1,81 @@
+# If the name of the model is not specified in the configuration it is assumed to be the same as the model repository directory containing the model.
+#name: "simple_identity"
+
+# For TensorRT, 'platform' must be set to tensorrt_plan. Currently, TensorRT backend does not support 'backend' field.
+# For PyTorch, 'backend' must be set to pytorch or 'platform' must be set to pytorch_libtorch.
+# For ONNX, 'backend' must be set to onnxruntime or 'platform' must be set to onnxruntime_onnx.
+# For TensorFlow, 'platform must be set to tensorflow_graphdef or tensorflow_savedmodel. Optionally 'backend' can be set to tensorflow.
+# For all other backends, 'backend' must be set to the name of the backend and 'platform' is optional.
+platform: "tensorflow_savedmodel"
+#backend: "tensorflow"
+
+# max_batch_size should be set to a value greater-or-equal-to 1
+max_batch_size: 16
+
+version_policy: { all { }}
+
+input [
+  {
+    name: "input_1"
+    data_type: TYPE_FP32
+    dims: [ 224, 224, 3 ]
+    is_shape_tensor: false
+    # is_shape_tensor: false -> "input_1": [ x, 224, 224, 3 ]
+    # is_shape_tensor: true  -> "input_1": [ 224, 224, 3 ]
+  }
+]
+output [
+  {
+    name: "act_softmax"
+    data_type: TYPE_FP32
+    dims: [ 1000 ]
+    is_shape_tensor: false
+  }
+]
+
+# instance_group [{ kind: KIND_CPU }]
+# instance_group [
+#   { kind: KIND_CPU }
+#   {
+#     count: 1
+#     kind: KIND_GPU
+#     gpus: [ 0 ]
+#     # gpus: []
+#     # profile: []
+#   }
+#   {
+#     count: 1
+#     kind: KIND_GPU
+#     gpus: [ 0 ]
+#     # gpus: []
+#     # profile: []
+#   },
+#   {
+#     count: 2
+#     kind: KIND_GPU
+#     gpus: [ 1, 2 ]
+#     # gpus: []
+#     # profile: []
+#   }
+# ]
+# Dynamic batching is a feature of Triton that allows inference requests to be combined by the server, so that a batch is created dynamically. Creating a batch of requests typically results in increased throughput. The dynamic batcher should be used for stateless. The dynamically created batches are distributed to all model instances configured for the model.
+dynamic_batching {
+  preferred_batch_size: [ 2, 4, 8, 16 ]
+  # The dynamic batcher can be configured to allow requests to be delayed for a limited time in the scheduler to allow other requests to join the dynamic batch. For example, the following configuration sets the maximum delay time of 100 microseconds for a request.
+  max_queue_delay_microseconds: 100
+}
+
+batch_input: []
+batch_output: []
+
+optimization: {
+  priority: PRIORITY_DEFAULT
+  input_pinned_memory: {
+      enable: true
+  }
+  output_pinned_memory: {
+      enable: true
+  }
+  gather_kernel_buffer_threshold: 0
+  eager_batching: false
+}

@@ -16,7 +16,7 @@ import kfserving
 import joblib
 import numpy as np
 import os
-from typing import Union, Dict
+from typing import Union, Dict, List
 from .utils import change_ndarray_tolist
 import logging
 
@@ -36,7 +36,7 @@ class ServingModel(kfserving.KFModel):  # pylint:disable=c-extension-no-member
         super().__init__(name)
         self.name = name
         self.model_dir = model_dir
-        self.triton_host = f'localhost:{os.getenv("TRITON_HTTP_PORT", "18080")}'
+        self.triton_host = f'localhost:{os.getenv("TRITON_HTTP_PORT", "8000")}'
         self.triton_client = None
         self.ready = False
 
@@ -52,8 +52,8 @@ class ServingModel(kfserving.KFModel):  # pylint:disable=c-extension-no-member
 
 
     def _predict_from_json(self, request: Dict) -> Dict:
-        instances = request["instances"]
-        inputs, outputs = self.parse_instances(instances)
+        instances = np.array(request["instances"])
+        inputs, outputs = self.parse_instances_from_ndarray(instances)
 
         try:
             # result = self._model.predict(inputs).tolist()
@@ -67,22 +67,11 @@ class ServingModel(kfserving.KFModel):  # pylint:disable=c-extension-no-member
             raise Exception("Failed to predict %s" % e)
 
     def _predict_from_bytes(self, request: bytes) -> Dict:
-        log.info(type(request))
+        parsed_request = MultipartRequest(request)
+        filename = parsed_request.filename
+        instances: np.ndarray = parsed_request.instances
 
-        (_start_boundary, content_disposition,
-         data_bytes, *__) = request.replace(b'\r\n\r\n', b'\r\n').split(b'\r\n')
-        *_, filename = content_disposition.split(b';')
-
-        filename = filename.decode('utf8').replace("'", "").replace('"', '')
-        if filename.endswith('npz') or filename.endswith('npy'):
-            npz = np.load(io.BytesIO(data_bytes), allow_pickle=True)
-            instances = npz[npz.files[0]]
-        elif filename.endswith('pkl'):
-            instances = pickle.load(io.BytesIO(data_bytes))
-        else:
-            raise Exception("Unsupported or invalid File Format: 'npz', 'npy' or 'pkl' format is avaliable.")
-
-        inputs, outputs = self.parse_instances(instances)
+        inputs, outputs = self.parse_instances_from_ndarray(instances)
 
         try:
             # result = self._model.predict(inputs).tolist()
@@ -105,32 +94,83 @@ class ServingModel(kfserving.KFModel):  # pylint:disable=c-extension-no-member
             raise Exception("Unsupported 'Content-Type': 'json' or 'multipart/form-data is available.")
 
 
-    def parse_instances(self, instances: Dict) -> Dict:
+    # def parse_instances_from_list(self, instances: List) -> Dict:
 
-        unique_ids = np.zeros([1, 1], dtype=np.int32)
-        segment_ids = instances["segment_ids"].reshape(1, 128)
-        input_ids = instances["input_ids"].reshape(1, 128)
-        input_mask = instances["input_mask"].reshape(1, 128)
+    #     # _input = instances["input_1"].reshape(-1, 224, 224, 3)
+    #     # _input = instances.get("input_1", ).reshape(-1, 224, 224, 3).astype(np.float32)
+    #     instances.reshape(-1, 224, 224, 3).astype(np.float32)
+
+    #     # See: https://github.com/triton-inference-server/server/blob/master/docs/model_configuration.md#datatypes
+    #     # FP32, FP16, INT8, INT16, INT32
+    #     inputs = [httpclient.InferInput('input_1', _input.shape, "FP32")]
+    #     inputs[0].set_data_from_numpy(_input)
+
+    #     outputs = [httpclient.InferRequestedOutput('act_softmax', binary_data=False)]
+    #     return inputs, outputs
+
+    def parse_instances_from_ndarray(self, instances: np.ndarray) -> Dict:
+
+        # _input = instances["input_1"].reshape(-1, 224, 224, 3)
+        _input = instances.reshape(-1, 224, 224, 3).astype(np.float32)
 
         # See: https://github.com/triton-inference-server/server/blob/master/docs/model_configuration.md#datatypes
         # FP32, FP16, INT8, INT16, INT32
-        inputs = [httpclient.InferInput('unique_ids', [1, 1], "INT32"),
-                  httpclient.InferInput('segment_ids', [1, 128], "INT32"),
-                  httpclient.InferInput('input_ids', [1, 128], "INT32"),
-                  httpclient.InferInput('input_mask', [1, 128], "INT32")]
-        inputs[0].set_data_from_numpy(unique_ids)
-        inputs[1].set_data_from_numpy(segment_ids)
-        inputs[2].set_data_from_numpy(input_ids)
-        inputs[3].set_data_from_numpy(input_mask)
+        inputs = [httpclient.InferInput('input_1', _input.shape, "FP32")]
+        inputs[0].set_data_from_numpy(_input)
 
-        outputs = [httpclient.InferRequestedOutput('start_logits', binary_data=False),
-                   httpclient.InferRequestedOutput('end_logits', binary_data=False)]
+        outputs = [httpclient.InferRequestedOutput(
+            'act_softmax', binary_data=False)]
         return inputs, outputs
 
     def parse_predictions(self, result_response: Dict) -> Dict:
-        end_logits = result_response['outputs'][0]['data']
-        start_logits = result_response['outputs'][1]['data']
+        _logits = result_response['outputs'][0]['data']
         return {
-            "end_logits": end_logits,
-            "start_logits": start_logits,
+            "_logits": _logits
         }
+
+
+class MultipartRequest:
+    boundary: bytes
+    content_disposition: str
+    name: str
+    filename: str
+    instances: np.ndarray
+
+    def __init__(self, request: bytes):
+        _info, data_bytes = request.split(b'\r\n\r\n')[:2]
+        #parsed_request = [i for i in request.split(b'\r\n') if i]
+        #if len(parsed_request) == 4:
+        #    (_start_boundary, _content_disposition,
+        #     data_bytes, _end_boundary) = parsed_request
+        #else:
+        #    (_start_boundary, _content_disposition, _,
+        #    data_bytes, _end_boundary) = parsed_request
+        _start_boundary, _content_disposition, *_ = [i for i in _info.split(b'\r\n') if i ]
+        self.boundary = _start_boundary.split(b'--')[-1]
+        self.data_bytes = data_bytes
+        self.content_disposition, _name, _filename = [
+            i.strip().decode('utf8').replace("'", "").replace('"', '')
+            for i in _content_disposition.split(b';')]
+        self.content_disposition
+        self.name = _name.split('name=')[-1]
+        self.filename = _filename.split('filename=')[-1]
+
+        try:
+            if self.filename.endswith('npz') or self.filename.endswith('npy'):
+                npz = np.load(io.BytesIO(data_bytes), allow_pickle=True)
+                self.instances = npz[npz.files[0]]
+            elif self.filename.endswith('pkl'):
+                self.instances = pickle.load(io.BytesIO(data_bytes))
+            else:
+                npz = np.load(io.BytesIO(data_bytes), allow_pickle=True)
+                self.instances = npz[npz.files[0]]
+        except Exception as e:
+            raise Exception(
+                "Unsupported or invalid File Format: " +
+                "'npz', 'npy' or 'pkl' format is avaliable.: {}" % e)
+
+    def __repr__(self):
+        return str(self)
+
+    def __str__(self):
+        return str(self.__dict__)

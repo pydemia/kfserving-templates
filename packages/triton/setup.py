@@ -20,6 +20,8 @@ package_nm = 'tritonserver'
 __version__ = "0.1.0"
 
 base_requires = [
+    "argparse >= 1.4.0",
+    "kfserving>=0.5.1",
     "numpy",
     "pandas",
 ]
@@ -32,7 +34,6 @@ tests_require = [
 ]
 
 aix_requires = [
-    "kfserving>=0.5.1",
     "argparse >= 1.4.0",
     "aix360 >= 0.1.0",
     "lime >= 0.1.1.37",
@@ -40,7 +41,6 @@ aix_requires = [
 ]
 
 alibi_requires = [
-    "kfserving>=0.5.1",
     "pandas>=0.24.2",
     "nest_asyncio>=1.4.0",
     "alibi==0.5.5",
@@ -63,31 +63,26 @@ lgb_requires = [
 ]
 
 pmml_requires = [
-    "kfserving>=0.5.1",
     "pypmml == 0.9.7",
 ]
 
 pytorch_requires = [
-    "kfserving>=0.5.1",
     "torch >= 1.0.0",
     "torchvision >= 0.2.0"
 ]
 
 sklearn_requires = [
-    "kfserving>=0.5.1",
     # "scikit-learn == 0.20.3",
     "scikit-learn >= 0.20.3",
     "joblib >= 0.13.0"
 ]
 
 xgb_requires = [
-    "kfserving>=0.5.1",
     "xgboost == 0.82",
     "scikit-learn == 0.20.3",
 ]
 
 triton_requires = [
-    "kfserving>=0.5.1",
 ]
 
 with open(f'{package_nm}/__version__.py', 'w') as f:

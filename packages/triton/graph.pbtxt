@@ -1,0 +1,11058 @@
+node {
+  name: "serving_default_dense_input"
+  op: "Placeholder"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: -1
+          }
+          dim {
+            size: 10
+          }
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "shape"
+    value {
+      shape {
+        dim {
+          size: -1
+        }
+        dim {
+          size: 10
+        }
+      }
+    }
+  }
+}
+node {
+  name: "dense_2/bias"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        float_val: -0.675394118
+      }
+    }
+  }
+}
+node {
+  name: "dense_2/kernel"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+          dim {
+            size: 50
+          }
+          dim {
+            size: 1
+          }
+        }
+      }
+    }
+  }
+}
+node {
+  name: "dense_1/bias"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+          dim {
+            size: 50
+          }
+        }
+      }
+    }
+  }
+}
+node {
+  name: "dense_1/kernel"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+          dim {
+            size: 100
+          }
+          dim {
+            size: 50
+          }
+        }
+      }
+    }
+  }
+}
+node {
+  name: "dense/bias"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+          dim {
+            size: 100
+          }
+        }
+      }
+    }
+  }
+}
+node {
+  name: "dense/kernel"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+          dim {
+            size: 10
+          }
+          dim {
+            size: 100
+          }
+        }
+      }
+    }
+  }
+}
+node {
+  name: "StatefulPartitionedCall"
+  op: "StatefulPartitionedCall"
+  input: "serving_default_dense_input"
+  input: "dense/kernel"
+  input: "dense/bias"
+  input: "dense_1/kernel"
+  input: "dense_1/bias"
+  input: "dense_2/kernel"
+  input: "dense_2/bias"
+  attr {
+    key: "Tin"
+    value {
+      list {
+        type: DT_FLOAT
+        type: 20
+        type: 20
+        type: 20
+        type: 20
+        type: 20
+        type: 20
+      }
+    }
+  }
+  attr {
+    key: "Tout"
+    value {
+      list {
+        type: DT_FLOAT
+      }
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: -1
+          }
+          dim {
+            size: 1
+          }
+        }
+      }
+    }
+  }
+  attr {
+    key: "_read_only_resource_inputs"
+    value {
+      list {
+        i: 1
+        i: 2
+        i: 3
+        i: 4
+        i: 5
+        i: 6
+      }
+    }
+  }
+  attr {
+    key: "config"
+    value {
+      s: ""
+    }
+  }
+  attr {
+    key: "config_proto"
+    value {
+      s: "\n\007\n\003GPU\020\000\n\007\n\003CPU\020\0012\002J\0008\001"
+    }
+  }
+  attr {
+    key: "executor_type"
+    value {
+      s: ""
+    }
+  }
+  attr {
+    key: "f"
+    value {
+      func {
+        name: "__inference_signature_wrapper_3810"
+      }
+    }
+  }
+}
+library {
+  function {
+    signature {
+      name: "__inference_sequential_layer_call_fn_3894"
+      input_arg {
+        name: "inputs"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "unknown"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_0"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_1"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_2"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_3"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_4"
+        type: 20
+      }
+      output_arg {
+        name: "identity"
+        type: DT_FLOAT
+      }
+      is_stateful: true
+      20: "StatefulPartitionedCall"
+    }
+    3 {
+      1: "StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+      3: "inputs"
+      3: "unknown"
+      3: "unknown_0"
+      3: "unknown_1"
+      3: "unknown_2"
+      3: "unknown_3"
+      3: "unknown_4"
+      5 {
+        1: "Tin"
+        2 {
+          1 {
+            6: "\001\024\024\024\024\024\024"
+          }
+        }
+      }
+      5 {
+        1: "Tout"
+        2 {
+          1 {
+            6: "\001"
+          }
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "_read_only_resource_inputs"
+        2 {
+          1 {
+            3: "\001\002\003\004\005\006"
+          }
+        }
+      }
+      5 {
+        1: "config_proto"
+        2 {
+          2 {
+            1 {
+              1: "GPU"
+              2: 0
+            }
+            1 {
+              1: "CPU"
+              2: 1
+            }
+            6 {
+              9: ""
+            }
+            7: 1
+          }
+        }
+      }
+      5 {
+        1: "f"
+        2 {
+          10 {
+            1: "__inference_sequential_layer_call_and_return_conditional_losses_3768"
+          }
+        }
+      }
+      6 {
+        1: "StatefulPartitionedCall"
+      }
+    }
+    3 {
+      1: "Identity"
+      2: "Identity"
+      3: "StatefulPartitionedCall:output:0"
+      3: "^StatefulPartitionedCall"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity"
+      }
+    }
+    4 {
+      1: "identity"
+      2: "Identity:output:0"
+    }
+    5 {
+      1: "_input_shapes"
+      2 {
+        1 {
+          7 {
+            2 {
+              1: 18446744073709551615
+            }
+            2 {
+              1: 10
+            }
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+        }
+      }
+    }
+    6 {
+      1: "StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+    }
+    7 {
+      1: 0
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 18446744073709551615
+                }
+                2 {
+                  1: 10
+                }
+              }
+            }
+          }
+        }
+        1 {
+          1: "_user_specified_name"
+          2 {
+            2: "inputs"
+          }
+        }
+      }
+    }
+    7 {
+      1: 1
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 2
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 3
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 4
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 5
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 6
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+  }
+  function {
+    signature {
+      name: "__inference_dense_layer_call_and_return_conditional_losses_3620"
+      input_arg {
+        name: "inputs"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "matmul_readvariableop_resource"
+        type: 20
+      }
+      input_arg {
+        name: "biasadd_readvariableop_resource"
+        type: 20
+      }
+      output_arg {
+        name: "identity"
+        type: DT_FLOAT
+      }
+      is_stateful: true
+    }
+    3 {
+      1: "MatMul/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "matmul_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 10
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "MatMul/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "MatMul"
+      2: "MatMul"
+      3: "inputs"
+      3: "MatMul/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "MatMul"
+      }
+    }
+    3 {
+      1: "BiasAdd/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "biasadd_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "BiasAdd/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "BiasAdd"
+      2: "BiasAdd"
+      3: "MatMul:product:0"
+      3: "BiasAdd/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "BiasAdd"
+      }
+    }
+    3 {
+      1: "Relu"
+      2: "Relu"
+      3: "BiasAdd:output:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Relu"
+      }
+    }
+    3 {
+      1: "Identity"
+      2: "Identity"
+      3: "Relu:activations:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity"
+      }
+    }
+    4 {
+      1: "identity"
+      2: "Identity:output:0"
+    }
+    5 {
+      1: "_input_shapes"
+      2 {
+        1 {
+          7 {
+            2 {
+              1: 18446744073709551615
+            }
+            2 {
+              1: 10
+            }
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+        }
+      }
+    }
+    7 {
+      1: 0
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 18446744073709551615
+                }
+                2 {
+                  1: 10
+                }
+              }
+            }
+          }
+        }
+        1 {
+          1: "_user_specified_name"
+          2 {
+            2: "inputs"
+          }
+        }
+      }
+    }
+    7 {
+      1: 1
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 2
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+  }
+  function {
+    signature {
+      name: "__inference_signature_wrapper_3810"
+      input_arg {
+        name: "dense_input"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "unknown"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_0"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_1"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_2"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_3"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_4"
+        type: 20
+      }
+      output_arg {
+        name: "identity"
+        type: DT_FLOAT
+      }
+      is_stateful: true
+      20: "StatefulPartitionedCall"
+    }
+    3 {
+      1: "StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+      3: "dense_input"
+      3: "unknown"
+      3: "unknown_0"
+      3: "unknown_1"
+      3: "unknown_2"
+      3: "unknown_3"
+      3: "unknown_4"
+      5 {
+        1: "Tin"
+        2 {
+          1 {
+            6: "\001\024\024\024\024\024\024"
+          }
+        }
+      }
+      5 {
+        1: "Tout"
+        2 {
+          1 {
+            6: "\001"
+          }
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "_read_only_resource_inputs"
+        2 {
+          1 {
+            3: "\001\002\003\004\005\006"
+          }
+        }
+      }
+      5 {
+        1: "config_proto"
+        2 {
+          2 {
+            1 {
+              1: "GPU"
+              2: 0
+            }
+            1 {
+              1: "CPU"
+              2: 1
+            }
+            6 {
+              9: ""
+            }
+            7: 1
+          }
+        }
+      }
+      5 {
+        1: "f"
+        2 {
+          10 {
+            1: "__inference__wrapped_model_3605"
+          }
+        }
+      }
+      6 {
+        1: "StatefulPartitionedCall"
+      }
+    }
+    3 {
+      1: "Identity"
+      2: "Identity"
+      3: "StatefulPartitionedCall:output:0"
+      3: "^StatefulPartitionedCall"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity"
+      }
+    }
+    4 {
+      1: "identity"
+      2: "Identity:output:0"
+    }
+    5 {
+      1: "_input_shapes"
+      2 {
+        1 {
+          7 {
+            2 {
+              1: 18446744073709551615
+            }
+            2 {
+              1: 10
+            }
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+        }
+      }
+    }
+    6 {
+      1: "StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+    }
+    7 {
+      1: 0
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 18446744073709551615
+                }
+                2 {
+                  1: 10
+                }
+              }
+            }
+          }
+        }
+        1 {
+          1: "_user_specified_name"
+          2 {
+            2: "dense_input"
+          }
+        }
+      }
+    }
+    7 {
+      1: 1
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 2
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 3
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 4
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 5
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 6
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+  }
+  function {
+    signature {
+      name: "__inference_sequential_layer_call_and_return_conditional_losses_3860"
+      input_arg {
+        name: "inputs"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "dense_matmul_readvariableop_resource"
+        type: 20
+      }
+      input_arg {
+        name: "dense_biasadd_readvariableop_resource"
+        type: 20
+      }
+      input_arg {
+        name: "dense_1_matmul_readvariableop_resource"
+        type: 20
+      }
+      input_arg {
+        name: "dense_1_biasadd_readvariableop_resource"
+        type: 20
+      }
+      input_arg {
+        name: "dense_2_matmul_readvariableop_resource"
+        type: 20
+      }
+      input_arg {
+        name: "dense_2_biasadd_readvariableop_resource"
+        type: 20
+      }
+      output_arg {
+        name: "identity"
+        type: DT_FLOAT
+      }
+      is_stateful: true
+    }
+    3 {
+      1: "dense/MatMul/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "dense_matmul_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 10
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "dense/MatMul/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "dense/MatMul"
+      2: "MatMul"
+      3: "inputs"
+      3: "dense/MatMul/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "dense/MatMul"
+      }
+    }
+    3 {
+      1: "dense/BiasAdd/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "dense_biasadd_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "dense/BiasAdd/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "dense/BiasAdd"
+      2: "BiasAdd"
+      3: "dense/MatMul:product:0"
+      3: "dense/BiasAdd/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "dense/BiasAdd"
+      }
+    }
+    3 {
+      1: "dense/Relu"
+      2: "Relu"
+      3: "dense/BiasAdd:output:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "dense/Relu"
+      }
+    }
+    3 {
+      1: "dense_1/MatMul/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "dense_1_matmul_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 100
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "dense_1/MatMul/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "dense_1/MatMul"
+      2: "MatMul"
+      3: "dense/Relu:activations:0"
+      3: "dense_1/MatMul/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "dense_1/MatMul"
+      }
+    }
+    3 {
+      1: "dense_1/BiasAdd/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "dense_1_biasadd_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "dense_1/BiasAdd/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "dense_1/BiasAdd"
+      2: "BiasAdd"
+      3: "dense_1/MatMul:product:0"
+      3: "dense_1/BiasAdd/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "dense_1/BiasAdd"
+      }
+    }
+    3 {
+      1: "dense_1/Relu"
+      2: "Relu"
+      3: "dense_1/BiasAdd:output:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "dense_1/Relu"
+      }
+    }
+    3 {
+      1: "dense_2/MatMul/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "dense_2_matmul_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 50
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "dense_2/MatMul/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "dense_2/MatMul"
+      2: "MatMul"
+      3: "dense_1/Relu:activations:0"
+      3: "dense_2/MatMul/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "dense_2/MatMul"
+      }
+    }
+    3 {
+      1: "dense_2/BiasAdd/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "dense_2_biasadd_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "dense_2/BiasAdd/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "dense_2/BiasAdd"
+      2: "BiasAdd"
+      3: "dense_2/MatMul:product:0"
+      3: "dense_2/BiasAdd/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "dense_2/BiasAdd"
+      }
+    }
+    3 {
+      1: "dense_2/Sigmoid"
+      2: "Sigmoid"
+      3: "dense_2/BiasAdd:output:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "dense_2/Sigmoid"
+      }
+    }
+    3 {
+      1: "Identity"
+      2: "Identity"
+      3: "dense_2/Sigmoid:y:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity"
+      }
+    }
+    4 {
+      1: "identity"
+      2: "Identity:output:0"
+    }
+    5 {
+      1: "_input_shapes"
+      2 {
+        1 {
+          7 {
+            2 {
+              1: 18446744073709551615
+            }
+            2 {
+              1: 10
+            }
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+        }
+      }
+    }
+    7 {
+      1: 0
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 18446744073709551615
+                }
+                2 {
+                  1: 10
+                }
+              }
+            }
+          }
+        }
+        1 {
+          1: "_user_specified_name"
+          2 {
+            2: "inputs"
+          }
+        }
+      }
+    }
+    7 {
+      1: 1
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 2
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 3
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 4
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 5
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 6
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+  }
+  function {
+    signature {
+      name: "__inference_sequential_layer_call_and_return_conditional_losses_3710"
+      input_arg {
+        name: "dense_input"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "dense_3694"
+        type: 20
+      }
+      input_arg {
+        name: "dense_3696"
+        type: 20
+      }
+      input_arg {
+        name: "dense_1_3699"
+        type: 20
+      }
+      input_arg {
+        name: "dense_1_3701"
+        type: 20
+      }
+      input_arg {
+        name: "dense_2_3704"
+        type: 20
+      }
+      input_arg {
+        name: "dense_2_3706"
+        type: 20
+      }
+      output_arg {
+        name: "identity"
+        type: DT_FLOAT
+      }
+      is_stateful: true
+      20: "dense/StatefulPartitionedCall"
+      20: "dense_1/StatefulPartitionedCall"
+      20: "dense_2/StatefulPartitionedCall"
+    }
+    3 {
+      1: "dense/StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+      3: "dense_input"
+      3: "dense_3694"
+      3: "dense_3696"
+      5 {
+        1: "Tin"
+        2 {
+          1 {
+            6: "\001\024\024"
+          }
+        }
+      }
+      5 {
+        1: "Tout"
+        2 {
+          1 {
+            6: "\001"
+          }
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "_read_only_resource_inputs"
+        2 {
+          1 {
+            3: "\001\002"
+          }
+        }
+      }
+      5 {
+        1: "config_proto"
+        2 {
+          2 {
+            1 {
+              1: "GPU"
+              2: 0
+            }
+            1 {
+              1: "CPU"
+              2: 1
+            }
+            6 {
+              9: ""
+            }
+            7: 1
+          }
+        }
+      }
+      5 {
+        1: "f"
+        2 {
+          10 {
+            1: "__inference_dense_layer_call_and_return_conditional_losses_3620"
+          }
+        }
+      }
+      6 {
+        1: "dense/StatefulPartitionedCall"
+      }
+    }
+    3 {
+      1: "dense_1/StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+      3: "dense/StatefulPartitionedCall:output:0"
+      3: "dense_1_3699"
+      3: "dense_1_3701"
+      5 {
+        1: "Tin"
+        2 {
+          1 {
+            6: "\001\024\024"
+          }
+        }
+      }
+      5 {
+        1: "Tout"
+        2 {
+          1 {
+            6: "\001"
+          }
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "_read_only_resource_inputs"
+        2 {
+          1 {
+            3: "\001\002"
+          }
+        }
+      }
+      5 {
+        1: "config_proto"
+        2 {
+          2 {
+            1 {
+              1: "GPU"
+              2: 0
+            }
+            1 {
+              1: "CPU"
+              2: 1
+            }
+            6 {
+              9: ""
+            }
+            7: 1
+          }
+        }
+      }
+      5 {
+        1: "f"
+        2 {
+          10 {
+            1: "__inference_dense_1_layer_call_and_return_conditional_losses_3647"
+          }
+        }
+      }
+      6 {
+        1: "dense_1/StatefulPartitionedCall"
+      }
+    }
+    3 {
+      1: "dense_2/StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+      3: "dense_1/StatefulPartitionedCall:output:0"
+      3: "dense_2_3704"
+      3: "dense_2_3706"
+      5 {
+        1: "Tin"
+        2 {
+          1 {
+            6: "\001\024\024"
+          }
+        }
+      }
+      5 {
+        1: "Tout"
+        2 {
+          1 {
+            6: "\001"
+          }
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "_read_only_resource_inputs"
+        2 {
+          1 {
+            3: "\001\002"
+          }
+        }
+      }
+      5 {
+        1: "config_proto"
+        2 {
+          2 {
+            1 {
+              1: "GPU"
+              2: 0
+            }
+            1 {
+              1: "CPU"
+              2: 1
+            }
+            6 {
+              9: ""
+            }
+            7: 1
+          }
+        }
+      }
+      5 {
+        1: "f"
+        2 {
+          10 {
+            1: "__inference_dense_2_layer_call_and_return_conditional_losses_3674"
+          }
+        }
+      }
+      6 {
+        1: "dense_2/StatefulPartitionedCall"
+      }
+    }
+    3 {
+      1: "Identity"
+      2: "Identity"
+      3: "dense_2/StatefulPartitionedCall:output:0"
+      3: "^dense/StatefulPartitionedCall"
+      3: "^dense_1/StatefulPartitionedCall"
+      3: "^dense_2/StatefulPartitionedCall"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity"
+      }
+    }
+    4 {
+      1: "identity"
+      2: "Identity:output:0"
+    }
+    5 {
+      1: "_input_shapes"
+      2 {
+        1 {
+          7 {
+            2 {
+              1: 18446744073709551615
+            }
+            2 {
+              1: 10
+            }
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+        }
+      }
+    }
+    6 {
+      1: "dense/StatefulPartitionedCall"
+      2: "dense/StatefulPartitionedCall"
+    }
+    6 {
+      1: "dense_1/StatefulPartitionedCall"
+      2: "dense_1/StatefulPartitionedCall"
+    }
+    6 {
+      1: "dense_2/StatefulPartitionedCall"
+      2: "dense_2/StatefulPartitionedCall"
+    }
+    7 {
+      1: 0
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 18446744073709551615
+                }
+                2 {
+                  1: 10
+                }
+              }
+            }
+          }
+        }
+        1 {
+          1: "_user_specified_name"
+          2 {
+            2: "dense_input"
+          }
+        }
+      }
+    }
+    7 {
+      1: 1
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 2
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 3
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 4
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 5
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 6
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+  }
+  function {
+    signature {
+      name: "__inference_sequential_layer_call_and_return_conditional_losses_3768"
+      input_arg {
+        name: "inputs"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "dense_3752"
+        type: 20
+      }
+      input_arg {
+        name: "dense_3754"
+        type: 20
+      }
+      input_arg {
+        name: "dense_1_3757"
+        type: 20
+      }
+      input_arg {
+        name: "dense_1_3759"
+        type: 20
+      }
+      input_arg {
+        name: "dense_2_3762"
+        type: 20
+      }
+      input_arg {
+        name: "dense_2_3764"
+        type: 20
+      }
+      output_arg {
+        name: "identity"
+        type: DT_FLOAT
+      }
+      is_stateful: true
+      20: "dense/StatefulPartitionedCall"
+      20: "dense_1/StatefulPartitionedCall"
+      20: "dense_2/StatefulPartitionedCall"
+    }
+    3 {
+      1: "dense/StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+      3: "inputs"
+      3: "dense_3752"
+      3: "dense_3754"
+      5 {
+        1: "Tin"
+        2 {
+          1 {
+            6: "\001\024\024"
+          }
+        }
+      }
+      5 {
+        1: "Tout"
+        2 {
+          1 {
+            6: "\001"
+          }
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "_read_only_resource_inputs"
+        2 {
+          1 {
+            3: "\001\002"
+          }
+        }
+      }
+      5 {
+        1: "config_proto"
+        2 {
+          2 {
+            1 {
+              1: "GPU"
+              2: 0
+            }
+            1 {
+              1: "CPU"
+              2: 1
+            }
+            6 {
+              9: ""
+            }
+            7: 1
+          }
+        }
+      }
+      5 {
+        1: "f"
+        2 {
+          10 {
+            1: "__inference_dense_layer_call_and_return_conditional_losses_3620"
+          }
+        }
+      }
+      6 {
+        1: "dense/StatefulPartitionedCall"
+      }
+    }
+    3 {
+      1: "dense_1/StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+      3: "dense/StatefulPartitionedCall:output:0"
+      3: "dense_1_3757"
+      3: "dense_1_3759"
+      5 {
+        1: "Tin"
+        2 {
+          1 {
+            6: "\001\024\024"
+          }
+        }
+      }
+      5 {
+        1: "Tout"
+        2 {
+          1 {
+            6: "\001"
+          }
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "_read_only_resource_inputs"
+        2 {
+          1 {
+            3: "\001\002"
+          }
+        }
+      }
+      5 {
+        1: "config_proto"
+        2 {
+          2 {
+            1 {
+              1: "GPU"
+              2: 0
+            }
+            1 {
+              1: "CPU"
+              2: 1
+            }
+            6 {
+              9: ""
+            }
+            7: 1
+          }
+        }
+      }
+      5 {
+        1: "f"
+        2 {
+          10 {
+            1: "__inference_dense_1_layer_call_and_return_conditional_losses_3647"
+          }
+        }
+      }
+      6 {
+        1: "dense_1/StatefulPartitionedCall"
+      }
+    }
+    3 {
+      1: "dense_2/StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+      3: "dense_1/StatefulPartitionedCall:output:0"
+      3: "dense_2_3762"
+      3: "dense_2_3764"
+      5 {
+        1: "Tin"
+        2 {
+          1 {
+            6: "\001\024\024"
+          }
+        }
+      }
+      5 {
+        1: "Tout"
+        2 {
+          1 {
+            6: "\001"
+          }
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "_read_only_resource_inputs"
+        2 {
+          1 {
+            3: "\001\002"
+          }
+        }
+      }
+      5 {
+        1: "config_proto"
+        2 {
+          2 {
+            1 {
+              1: "GPU"
+              2: 0
+            }
+            1 {
+              1: "CPU"
+              2: 1
+            }
+            6 {
+              9: ""
+            }
+            7: 1
+          }
+        }
+      }
+      5 {
+        1: "f"
+        2 {
+          10 {
+            1: "__inference_dense_2_layer_call_and_return_conditional_losses_3674"
+          }
+        }
+      }
+      6 {
+        1: "dense_2/StatefulPartitionedCall"
+      }
+    }
+    3 {
+      1: "Identity"
+      2: "Identity"
+      3: "dense_2/StatefulPartitionedCall:output:0"
+      3: "^dense/StatefulPartitionedCall"
+      3: "^dense_1/StatefulPartitionedCall"
+      3: "^dense_2/StatefulPartitionedCall"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity"
+      }
+    }
+    4 {
+      1: "identity"
+      2: "Identity:output:0"
+    }
+    5 {
+      1: "_input_shapes"
+      2 {
+        1 {
+          7 {
+            2 {
+              1: 18446744073709551615
+            }
+            2 {
+              1: 10
+            }
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+        }
+      }
+    }
+    6 {
+      1: "dense/StatefulPartitionedCall"
+      2: "dense/StatefulPartitionedCall"
+    }
+    6 {
+      1: "dense_1/StatefulPartitionedCall"
+      2: "dense_1/StatefulPartitionedCall"
+    }
+    6 {
+      1: "dense_2/StatefulPartitionedCall"
+      2: "dense_2/StatefulPartitionedCall"
+    }
+    7 {
+      1: 0
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 18446744073709551615
+                }
+                2 {
+                  1: 10
+                }
+              }
+            }
+          }
+        }
+        1 {
+          1: "_user_specified_name"
+          2 {
+            2: "inputs"
+          }
+        }
+      }
+    }
+    7 {
+      1: 1
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 2
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 3
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 4
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 5
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 6
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+  }
+  function {
+    signature {
+      name: "__inference_sequential_layer_call_fn_3783"
+      input_arg {
+        name: "dense_input"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "unknown"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_0"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_1"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_2"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_3"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_4"
+        type: 20
+      }
+      output_arg {
+        name: "identity"
+        type: DT_FLOAT
+      }
+      is_stateful: true
+      20: "StatefulPartitionedCall"
+    }
+    3 {
+      1: "StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+      3: "dense_input"
+      3: "unknown"
+      3: "unknown_0"
+      3: "unknown_1"
+      3: "unknown_2"
+      3: "unknown_3"
+      3: "unknown_4"
+      5 {
+        1: "Tin"
+        2 {
+          1 {
+            6: "\001\024\024\024\024\024\024"
+          }
+        }
+      }
+      5 {
+        1: "Tout"
+        2 {
+          1 {
+            6: "\001"
+          }
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "_read_only_resource_inputs"
+        2 {
+          1 {
+            3: "\001\002\003\004\005\006"
+          }
+        }
+      }
+      5 {
+        1: "config_proto"
+        2 {
+          2 {
+            1 {
+              1: "GPU"
+              2: 0
+            }
+            1 {
+              1: "CPU"
+              2: 1
+            }
+            6 {
+              9: ""
+            }
+            7: 1
+          }
+        }
+      }
+      5 {
+        1: "f"
+        2 {
+          10 {
+            1: "__inference_sequential_layer_call_and_return_conditional_losses_3768"
+          }
+        }
+      }
+      6 {
+        1: "StatefulPartitionedCall"
+      }
+    }
+    3 {
+      1: "Identity"
+      2: "Identity"
+      3: "StatefulPartitionedCall:output:0"
+      3: "^StatefulPartitionedCall"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity"
+      }
+    }
+    4 {
+      1: "identity"
+      2: "Identity:output:0"
+    }
+    5 {
+      1: "_input_shapes"
+      2 {
+        1 {
+          7 {
+            2 {
+              1: 18446744073709551615
+            }
+            2 {
+              1: 10
+            }
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+        }
+      }
+    }
+    6 {
+      1: "StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+    }
+    7 {
+      1: 0
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 18446744073709551615
+                }
+                2 {
+                  1: 10
+                }
+              }
+            }
+          }
+        }
+        1 {
+          1: "_user_specified_name"
+          2 {
+            2: "dense_input"
+          }
+        }
+      }
+    }
+    7 {
+      1: 1
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 2
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 3
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 4
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 5
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 6
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+  }
+  function {
+    signature {
+      name: "__inference_dense_2_layer_call_and_return_conditional_losses_3674"
+      input_arg {
+        name: "inputs"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "matmul_readvariableop_resource"
+        type: 20
+      }
+      input_arg {
+        name: "biasadd_readvariableop_resource"
+        type: 20
+      }
+      output_arg {
+        name: "identity"
+        type: DT_FLOAT
+      }
+      is_stateful: true
+    }
+    3 {
+      1: "MatMul/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "matmul_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 50
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "MatMul/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "MatMul"
+      2: "MatMul"
+      3: "inputs"
+      3: "MatMul/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "MatMul"
+      }
+    }
+    3 {
+      1: "BiasAdd/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "biasadd_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "BiasAdd/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "BiasAdd"
+      2: "BiasAdd"
+      3: "MatMul:product:0"
+      3: "BiasAdd/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "BiasAdd"
+      }
+    }
+    3 {
+      1: "Sigmoid"
+      2: "Sigmoid"
+      3: "BiasAdd:output:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Sigmoid"
+      }
+    }
+    3 {
+      1: "Identity"
+      2: "Identity"
+      3: "Sigmoid:y:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity"
+      }
+    }
+    4 {
+      1: "identity"
+      2: "Identity:output:0"
+    }
+    5 {
+      1: "_input_shapes"
+      2 {
+        1 {
+          7 {
+            2 {
+              1: 18446744073709551615
+            }
+            2 {
+              1: 50
+            }
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+        }
+      }
+    }
+    7 {
+      1: 0
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 18446744073709551615
+                }
+                2 {
+                  1: 50
+                }
+              }
+            }
+          }
+        }
+        1 {
+          1: "_user_specified_name"
+          2 {
+            2: "inputs"
+          }
+        }
+      }
+    }
+    7 {
+      1: 1
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 2
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+  }
+  function {
+    signature {
+      name: "__inference_dense_1_layer_call_and_return_conditional_losses_3925"
+      input_arg {
+        name: "inputs"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "matmul_readvariableop_resource"
+        type: 20
+      }
+      input_arg {
+        name: "biasadd_readvariableop_resource"
+        type: 20
+      }
+      output_arg {
+        name: "identity"
+        type: DT_FLOAT
+      }
+      is_stateful: true
+    }
+    3 {
+      1: "MatMul/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "matmul_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 100
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "MatMul/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "MatMul"
+      2: "MatMul"
+      3: "inputs"
+      3: "MatMul/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "MatMul"
+      }
+    }
+    3 {
+      1: "BiasAdd/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "biasadd_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "BiasAdd/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "BiasAdd"
+      2: "BiasAdd"
+      3: "MatMul:product:0"
+      3: "BiasAdd/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "BiasAdd"
+      }
+    }
+    3 {
+      1: "Relu"
+      2: "Relu"
+      3: "BiasAdd:output:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Relu"
+      }
+    }
+    3 {
+      1: "Identity"
+      2: "Identity"
+      3: "Relu:activations:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity"
+      }
+    }
+    4 {
+      1: "identity"
+      2: "Identity:output:0"
+    }
+    5 {
+      1: "_input_shapes"
+      2 {
+        1 {
+          7 {
+            2 {
+              1: 18446744073709551615
+            }
+            2 {
+              1: 100
+            }
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+        }
+      }
+    }
+    7 {
+      1: 0
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 18446744073709551615
+                }
+                2 {
+                  1: 100
+                }
+              }
+            }
+          }
+        }
+        1 {
+          1: "_user_specified_name"
+          2 {
+            2: "inputs"
+          }
+        }
+      }
+    }
+    7 {
+      1: 1
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 2
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+  }
+  function {
+    signature {
+      name: "__inference__wrapped_model_3605"
+      input_arg {
+        name: "dense_input"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "sequential_dense_matmul_readvariableop_resource"
+        type: 20
+      }
+      input_arg {
+        name: "sequential_dense_biasadd_readvariableop_resource"
+        type: 20
+      }
+      input_arg {
+        name: "sequential_dense_1_matmul_readvariableop_resource"
+        type: 20
+      }
+      input_arg {
+        name: "sequential_dense_1_biasadd_readvariableop_resource"
+        type: 20
+      }
+      input_arg {
+        name: "sequential_dense_2_matmul_readvariableop_resource"
+        type: 20
+      }
+      input_arg {
+        name: "sequential_dense_2_biasadd_readvariableop_resource"
+        type: 20
+      }
+      output_arg {
+        name: "identity"
+        type: DT_FLOAT
+      }
+      is_stateful: true
+    }
+    3 {
+      1: "sequential/dense/MatMul/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "sequential_dense_matmul_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 10
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "sequential/dense/MatMul/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "sequential/dense/MatMul"
+      2: "MatMul"
+      3: "dense_input"
+      3: "sequential/dense/MatMul/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "sequential/dense/MatMul"
+      }
+    }
+    3 {
+      1: "sequential/dense/BiasAdd/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "sequential_dense_biasadd_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "sequential/dense/BiasAdd/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "sequential/dense/BiasAdd"
+      2: "BiasAdd"
+      3: "sequential/dense/MatMul:product:0"
+      3: "sequential/dense/BiasAdd/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "sequential/dense/BiasAdd"
+      }
+    }
+    3 {
+      1: "sequential/dense/Relu"
+      2: "Relu"
+      3: "sequential/dense/BiasAdd:output:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "sequential/dense/Relu"
+      }
+    }
+    3 {
+      1: "sequential/dense_1/MatMul/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "sequential_dense_1_matmul_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 100
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "sequential/dense_1/MatMul/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "sequential/dense_1/MatMul"
+      2: "MatMul"
+      3: "sequential/dense/Relu:activations:0"
+      3: "sequential/dense_1/MatMul/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "sequential/dense_1/MatMul"
+      }
+    }
+    3 {
+      1: "sequential/dense_1/BiasAdd/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "sequential_dense_1_biasadd_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "sequential/dense_1/BiasAdd/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "sequential/dense_1/BiasAdd"
+      2: "BiasAdd"
+      3: "sequential/dense_1/MatMul:product:0"
+      3: "sequential/dense_1/BiasAdd/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "sequential/dense_1/BiasAdd"
+      }
+    }
+    3 {
+      1: "sequential/dense_1/Relu"
+      2: "Relu"
+      3: "sequential/dense_1/BiasAdd:output:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "sequential/dense_1/Relu"
+      }
+    }
+    3 {
+      1: "sequential/dense_2/MatMul/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "sequential_dense_2_matmul_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 50
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "sequential/dense_2/MatMul/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "sequential/dense_2/MatMul"
+      2: "MatMul"
+      3: "sequential/dense_1/Relu:activations:0"
+      3: "sequential/dense_2/MatMul/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "sequential/dense_2/MatMul"
+      }
+    }
+    3 {
+      1: "sequential/dense_2/BiasAdd/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "sequential_dense_2_biasadd_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "sequential/dense_2/BiasAdd/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "sequential/dense_2/BiasAdd"
+      2: "BiasAdd"
+      3: "sequential/dense_2/MatMul:product:0"
+      3: "sequential/dense_2/BiasAdd/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "sequential/dense_2/BiasAdd"
+      }
+    }
+    3 {
+      1: "sequential/dense_2/Sigmoid"
+      2: "Sigmoid"
+      3: "sequential/dense_2/BiasAdd:output:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "sequential/dense_2/Sigmoid"
+      }
+    }
+    3 {
+      1: "Identity"
+      2: "Identity"
+      3: "sequential/dense_2/Sigmoid:y:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity"
+      }
+    }
+    4 {
+      1: "identity"
+      2: "Identity:output:0"
+    }
+    5 {
+      1: "_input_shapes"
+      2 {
+        1 {
+          7 {
+            2 {
+              1: 18446744073709551615
+            }
+            2 {
+              1: 10
+            }
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+        }
+      }
+    }
+    7 {
+      1: 0
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 18446744073709551615
+                }
+                2 {
+                  1: 10
+                }
+              }
+            }
+          }
+        }
+        1 {
+          1: "_user_specified_name"
+          2 {
+            2: "dense_input"
+          }
+        }
+      }
+    }
+    7 {
+      1: 1
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 2
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 3
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 4
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 5
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 6
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+  }
+  function {
+    signature {
+      name: "__inference_dense_layer_call_and_return_conditional_losses_3905"
+      input_arg {
+        name: "inputs"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "matmul_readvariableop_resource"
+        type: 20
+      }
+      input_arg {
+        name: "biasadd_readvariableop_resource"
+        type: 20
+      }
+      output_arg {
+        name: "identity"
+        type: DT_FLOAT
+      }
+      is_stateful: true
+    }
+    3 {
+      1: "MatMul/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "matmul_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 10
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "MatMul/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "MatMul"
+      2: "MatMul"
+      3: "inputs"
+      3: "MatMul/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "MatMul"
+      }
+    }
+    3 {
+      1: "BiasAdd/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "biasadd_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "BiasAdd/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "BiasAdd"
+      2: "BiasAdd"
+      3: "MatMul:product:0"
+      3: "BiasAdd/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "BiasAdd"
+      }
+    }
+    3 {
+      1: "Relu"
+      2: "Relu"
+      3: "BiasAdd:output:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Relu"
+      }
+    }
+    3 {
+      1: "Identity"
+      2: "Identity"
+      3: "Relu:activations:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity"
+      }
+    }
+    4 {
+      1: "identity"
+      2: "Identity:output:0"
+    }
+    5 {
+      1: "_input_shapes"
+      2 {
+        1 {
+          7 {
+            2 {
+              1: 18446744073709551615
+            }
+            2 {
+              1: 10
+            }
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+        }
+      }
+    }
+    7 {
+      1: 0
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 18446744073709551615
+                }
+                2 {
+                  1: 10
+                }
+              }
+            }
+          }
+        }
+        1 {
+          1: "_user_specified_name"
+          2 {
+            2: "inputs"
+          }
+        }
+      }
+    }
+    7 {
+      1: 1
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 2
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+  }
+  function {
+    signature {
+      name: "__inference_dense_2_layer_call_and_return_conditional_losses_3945"
+      input_arg {
+        name: "inputs"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "matmul_readvariableop_resource"
+        type: 20
+      }
+      input_arg {
+        name: "biasadd_readvariableop_resource"
+        type: 20
+      }
+      output_arg {
+        name: "identity"
+        type: DT_FLOAT
+      }
+      is_stateful: true
+    }
+    3 {
+      1: "MatMul/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "matmul_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 50
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "MatMul/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "MatMul"
+      2: "MatMul"
+      3: "inputs"
+      3: "MatMul/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "MatMul"
+      }
+    }
+    3 {
+      1: "BiasAdd/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "biasadd_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "BiasAdd/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "BiasAdd"
+      2: "BiasAdd"
+      3: "MatMul:product:0"
+      3: "BiasAdd/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "BiasAdd"
+      }
+    }
+    3 {
+      1: "Sigmoid"
+      2: "Sigmoid"
+      3: "BiasAdd:output:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Sigmoid"
+      }
+    }
+    3 {
+      1: "Identity"
+      2: "Identity"
+      3: "Sigmoid:y:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity"
+      }
+    }
+    4 {
+      1: "identity"
+      2: "Identity:output:0"
+    }
+    5 {
+      1: "_input_shapes"
+      2 {
+        1 {
+          7 {
+            2 {
+              1: 18446744073709551615
+            }
+            2 {
+              1: 50
+            }
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+        }
+      }
+    }
+    7 {
+      1: 0
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 18446744073709551615
+                }
+                2 {
+                  1: 50
+                }
+              }
+            }
+          }
+        }
+        1 {
+          1: "_user_specified_name"
+          2 {
+            2: "inputs"
+          }
+        }
+      }
+    }
+    7 {
+      1: 1
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 2
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+  }
+  function {
+    signature {
+      name: "__inference_sequential_layer_call_fn_3877"
+      input_arg {
+        name: "inputs"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "unknown"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_0"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_1"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_2"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_3"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_4"
+        type: 20
+      }
+      output_arg {
+        name: "identity"
+        type: DT_FLOAT
+      }
+      is_stateful: true
+      20: "StatefulPartitionedCall"
+    }
+    3 {
+      1: "StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+      3: "inputs"
+      3: "unknown"
+      3: "unknown_0"
+      3: "unknown_1"
+      3: "unknown_2"
+      3: "unknown_3"
+      3: "unknown_4"
+      5 {
+        1: "Tin"
+        2 {
+          1 {
+            6: "\001\024\024\024\024\024\024"
+          }
+        }
+      }
+      5 {
+        1: "Tout"
+        2 {
+          1 {
+            6: "\001"
+          }
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "_read_only_resource_inputs"
+        2 {
+          1 {
+            3: "\001\002\003\004\005\006"
+          }
+        }
+      }
+      5 {
+        1: "config_proto"
+        2 {
+          2 {
+            1 {
+              1: "GPU"
+              2: 0
+            }
+            1 {
+              1: "CPU"
+              2: 1
+            }
+            6 {
+              9: ""
+            }
+            7: 1
+          }
+        }
+      }
+      5 {
+        1: "f"
+        2 {
+          10 {
+            1: "__inference_sequential_layer_call_and_return_conditional_losses_3732"
+          }
+        }
+      }
+      6 {
+        1: "StatefulPartitionedCall"
+      }
+    }
+    3 {
+      1: "Identity"
+      2: "Identity"
+      3: "StatefulPartitionedCall:output:0"
+      3: "^StatefulPartitionedCall"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity"
+      }
+    }
+    4 {
+      1: "identity"
+      2: "Identity:output:0"
+    }
+    5 {
+      1: "_input_shapes"
+      2 {
+        1 {
+          7 {
+            2 {
+              1: 18446744073709551615
+            }
+            2 {
+              1: 10
+            }
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+        }
+      }
+    }
+    6 {
+      1: "StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+    }
+    7 {
+      1: 0
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 18446744073709551615
+                }
+                2 {
+                  1: 10
+                }
+              }
+            }
+          }
+        }
+        1 {
+          1: "_user_specified_name"
+          2 {
+            2: "inputs"
+          }
+        }
+      }
+    }
+    7 {
+      1: 1
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 2
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 3
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 4
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 5
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 6
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+  }
+  function {
+    signature {
+      name: "__inference_dense_1_layer_call_fn_3934"
+      input_arg {
+        name: "inputs"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "unknown"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_0"
+        type: 20
+      }
+      output_arg {
+        name: "identity"
+        type: DT_FLOAT
+      }
+      is_stateful: true
+      20: "StatefulPartitionedCall"
+    }
+    3 {
+      1: "StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+      3: "inputs"
+      3: "unknown"
+      3: "unknown_0"
+      5 {
+        1: "Tin"
+        2 {
+          1 {
+            6: "\001\024\024"
+          }
+        }
+      }
+      5 {
+        1: "Tout"
+        2 {
+          1 {
+            6: "\001"
+          }
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "_read_only_resource_inputs"
+        2 {
+          1 {
+            3: "\001\002"
+          }
+        }
+      }
+      5 {
+        1: "config_proto"
+        2 {
+          2 {
+            1 {
+              1: "GPU"
+              2: 0
+            }
+            1 {
+              1: "CPU"
+              2: 1
+            }
+            6 {
+              9: ""
+            }
+            7: 1
+          }
+        }
+      }
+      5 {
+        1: "f"
+        2 {
+          10 {
+            1: "__inference_dense_1_layer_call_and_return_conditional_losses_3647"
+          }
+        }
+      }
+      6 {
+        1: "StatefulPartitionedCall"
+      }
+    }
+    3 {
+      1: "Identity"
+      2: "Identity"
+      3: "StatefulPartitionedCall:output:0"
+      3: "^StatefulPartitionedCall"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity"
+      }
+    }
+    4 {
+      1: "identity"
+      2: "Identity:output:0"
+    }
+    5 {
+      1: "_input_shapes"
+      2 {
+        1 {
+          7 {
+            2 {
+              1: 18446744073709551615
+            }
+            2 {
+              1: 100
+            }
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+        }
+      }
+    }
+    6 {
+      1: "StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+    }
+    7 {
+      1: 0
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 18446744073709551615
+                }
+                2 {
+                  1: 100
+                }
+              }
+            }
+          }
+        }
+        1 {
+          1: "_user_specified_name"
+          2 {
+            2: "inputs"
+          }
+        }
+      }
+    }
+    7 {
+      1: 1
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 2
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+  }
+  function {
+    signature {
+      name: "__inference_dense_layer_call_fn_3914"
+      input_arg {
+        name: "inputs"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "unknown"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_0"
+        type: 20
+      }
+      output_arg {
+        name: "identity"
+        type: DT_FLOAT
+      }
+      is_stateful: true
+      20: "StatefulPartitionedCall"
+    }
+    3 {
+      1: "StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+      3: "inputs"
+      3: "unknown"
+      3: "unknown_0"
+      5 {
+        1: "Tin"
+        2 {
+          1 {
+            6: "\001\024\024"
+          }
+        }
+      }
+      5 {
+        1: "Tout"
+        2 {
+          1 {
+            6: "\001"
+          }
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "_read_only_resource_inputs"
+        2 {
+          1 {
+            3: "\001\002"
+          }
+        }
+      }
+      5 {
+        1: "config_proto"
+        2 {
+          2 {
+            1 {
+              1: "GPU"
+              2: 0
+            }
+            1 {
+              1: "CPU"
+              2: 1
+            }
+            6 {
+              9: ""
+            }
+            7: 1
+          }
+        }
+      }
+      5 {
+        1: "f"
+        2 {
+          10 {
+            1: "__inference_dense_layer_call_and_return_conditional_losses_3620"
+          }
+        }
+      }
+      6 {
+        1: "StatefulPartitionedCall"
+      }
+    }
+    3 {
+      1: "Identity"
+      2: "Identity"
+      3: "StatefulPartitionedCall:output:0"
+      3: "^StatefulPartitionedCall"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity"
+      }
+    }
+    4 {
+      1: "identity"
+      2: "Identity:output:0"
+    }
+    5 {
+      1: "_input_shapes"
+      2 {
+        1 {
+          7 {
+            2 {
+              1: 18446744073709551615
+            }
+            2 {
+              1: 10
+            }
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+        }
+      }
+    }
+    6 {
+      1: "StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+    }
+    7 {
+      1: 0
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 18446744073709551615
+                }
+                2 {
+                  1: 10
+                }
+              }
+            }
+          }
+        }
+        1 {
+          1: "_user_specified_name"
+          2 {
+            2: "inputs"
+          }
+        }
+      }
+    }
+    7 {
+      1: 1
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 2
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+  }
+  function {
+    signature {
+      name: "__inference__traced_restore_4119"
+      input_arg {
+        name: "file_prefix"
+        type: DT_STRING
+      }
+      input_arg {
+        name: "assignvariableop_dense_kernel"
+        type: 20
+      }
+      input_arg {
+        name: "assignvariableop_1_dense_bias"
+        type: 20
+      }
+      input_arg {
+        name: "assignvariableop_2_dense_1_kernel"
+        type: 20
+      }
+      input_arg {
+        name: "assignvariableop_3_dense_1_bias"
+        type: 20
+      }
+      input_arg {
+        name: "assignvariableop_4_dense_2_kernel"
+        type: 20
+      }
+      input_arg {
+        name: "assignvariableop_5_dense_2_bias"
+        type: 20
+      }
+      input_arg {
+        name: "assignvariableop_6_rmsprop_iter"
+        type: 20
+      }
+      input_arg {
+        name: "assignvariableop_7_rmsprop_decay"
+        type: 20
+      }
+      input_arg {
+        name: "assignvariableop_8_rmsprop_learning_rate"
+        type: 20
+      }
+      input_arg {
+        name: "assignvariableop_9_rmsprop_momentum"
+        type: 20
+      }
+      input_arg {
+        name: "assignvariableop_10_rmsprop_rho"
+        type: 20
+      }
+      input_arg {
+        name: "assignvariableop_11_total"
+        type: 20
+      }
+      input_arg {
+        name: "assignvariableop_12_count"
+        type: 20
+      }
+      input_arg {
+        name: "assignvariableop_13_total_1"
+        type: 20
+      }
+      input_arg {
+        name: "assignvariableop_14_count_1"
+        type: 20
+      }
+      input_arg {
+        name: "assignvariableop_15_rmsprop_dense_kernel_rms"
+        type: 20
+      }
+      input_arg {
+        name: "assignvariableop_16_rmsprop_dense_bias_rms"
+        type: 20
+      }
+      input_arg {
+        name: "assignvariableop_17_rmsprop_dense_1_kernel_rms"
+        type: 20
+      }
+      input_arg {
+        name: "assignvariableop_18_rmsprop_dense_1_bias_rms"
+        type: 20
+      }
+      input_arg {
+        name: "assignvariableop_19_rmsprop_dense_2_kernel_rms"
+        type: 20
+      }
+      input_arg {
+        name: "assignvariableop_20_rmsprop_dense_2_bias_rms"
+        type: 20
+      }
+      output_arg {
+        name: "identity_22"
+        type: DT_STRING
+      }
+      is_stateful: true
+      20: "AssignVariableOp"
+      20 {
+        8: 0x7261566e67697373
+        13: 0x315f704f656c6261
+      }
+      20: "AssignVariableOp_10"
+      20: "AssignVariableOp_11"
+      20: "AssignVariableOp_12"
+      20: "AssignVariableOp_13"
+      20: "AssignVariableOp_14"
+      20: "AssignVariableOp_15"
+      20: "AssignVariableOp_16"
+      20: "AssignVariableOp_17"
+      20: "AssignVariableOp_18"
+      20: "AssignVariableOp_19"
+      20 {
+        8: 0x7261566e67697373
+        13: 0x325f704f656c6261
+      }
+      20: "AssignVariableOp_20"
+      20 {
+        8: 0x7261566e67697373
+        13: 0x335f704f656c6261
+      }
+      20 {
+        8: 0x7261566e67697373
+        13: 0x345f704f656c6261
+      }
+      20 {
+        8: 0x7261566e67697373
+        13: 0x355f704f656c6261
+      }
+      20 {
+        8: 0x7261566e67697373
+        13: 0x365f704f656c6261
+      }
+      20 {
+        8: 0x7261566e67697373
+        13: 0x375f704f656c6261
+      }
+      20 {
+        8: 0x7261566e67697373
+        13: 0x385f704f656c6261
+      }
+      20 {
+        8: 0x7261566e67697373
+        13: 0x395f704f656c6261
+      }
+      20: "RestoreV2"
+      20: "RestoreV2_1"
+    }
+    3 {
+      1: "RestoreV2/tensor_names"
+      2: "Const"
+      4: "/device:CPU:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 21
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 7
+        }
+      }
+      5 {
+        1: "value"
+        2 {
+          8 {
+            1: 7
+            2 {
+              2 {
+                1: 21
+              }
+            }
+            8: "layer_with_weights-0/kernel/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "layer_with_weights-0/bias/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "layer_with_weights-1/kernel/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "layer_with_weights-1/bias/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "layer_with_weights-2/kernel/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "layer_with_weights-2/bias/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "optimizer/iter/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "optimizer/decay/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "optimizer/learning_rate/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "optimizer/momentum/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "optimizer/rho/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "keras_api/metrics/0/total/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "keras_api/metrics/0/count/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "keras_api/metrics/1/total/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "keras_api/metrics/1/count/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "layer_with_weights-0/kernel/.OPTIMIZER_SLOT/optimizer/rms/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "layer_with_weights-0/bias/.OPTIMIZER_SLOT/optimizer/rms/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "layer_with_weights-1/kernel/.OPTIMIZER_SLOT/optimizer/rms/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "layer_with_weights-1/bias/.OPTIMIZER_SLOT/optimizer/rms/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "layer_with_weights-2/kernel/.OPTIMIZER_SLOT/optimizer/rms/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "layer_with_weights-2/bias/.OPTIMIZER_SLOT/optimizer/rms/.ATTRIBUTES/VARIABLE_VALUE"
+          }
+        }
+      }
+      6 {
+        1: "RestoreV2/tensor_names"
+      }
+    }
+    3 {
+      1: "RestoreV2/shape_and_slices"
+      2: "Const"
+      4: "/device:CPU:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 21
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 7
+        }
+      }
+      5 {
+        1: "value"
+        2 {
+          8 {
+            1: 7
+            2 {
+              2 {
+                1: 21
+              }
+            }
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+          }
+        }
+      }
+      6 {
+        1: "RestoreV2/shape_and_slices"
+      }
+    }
+    3 {
+      1: "RestoreV2"
+      2: "RestoreV2"
+      3: "file_prefix"
+      3: "RestoreV2/tensor_names:output:0"
+      3: "RestoreV2/shape_and_slices:output:0"
+      4: "/device:CPU:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              3: 1
+            }
+            7 {
+              3: 1
+            }
+            7 {
+              3: 1
+            }
+            7 {
+              3: 1
+            }
+            7 {
+              3: 1
+            }
+            7 {
+              3: 1
+            }
+            7 {
+              3: 1
+            }
+            7 {
+              3: 1
+            }
+            7 {
+              3: 1
+            }
+            7 {
+              3: 1
+            }
+            7 {
+              3: 1
+            }
+            7 {
+              3: 1
+            }
+            7 {
+              3: 1
+            }
+            7 {
+              3: 1
+            }
+            7 {
+              3: 1
+            }
+            7 {
+              3: 1
+            }
+            7 {
+              3: 1
+            }
+            7 {
+              3: 1
+            }
+            7 {
+              3: 1
+            }
+            7 {
+              3: 1
+            }
+            7 {
+              3: 1
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtypes"
+        2 {
+          1 {
+            6: "\001\001\001\001\001\001\t\001\001\001\001\001\001\001\001\001\001\001\001\001\001"
+          }
+        }
+      }
+      6 {
+        1: "RestoreV2"
+      }
+    }
+    3 {
+      1: "Identity"
+      2: "Identity"
+      3: "RestoreV2:tensors:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              3: 1
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity"
+      }
+    }
+    3 {
+      1: "AssignVariableOp"
+      2: "AssignVariableOp"
+      3: "assignvariableop_dense_kernel"
+      3: "Identity:output:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1: ""
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "AssignVariableOp"
+      }
+    }
+    3 {
+      1: "Identity_1"
+      2: "Identity"
+      3: "RestoreV2:tensors:1"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              3: 1
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity_1"
+      }
+    }
+    3 {
+      1 {
+        8: 0x7261566e67697373
+        13: 0x315f704f656c6261
+      }
+      2: "AssignVariableOp"
+      3: "assignvariableop_1_dense_bias"
+      3: "Identity_1:output:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1: ""
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1 {
+          8: 0x7261566e67697373
+          13: 0x315f704f656c6261
+        }
+      }
+    }
+    3 {
+      1: "Identity_2"
+      2: "Identity"
+      3: "RestoreV2:tensors:2"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              3: 1
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity_2"
+      }
+    }
+    3 {
+      1 {
+        8: 0x7261566e67697373
+        13: 0x325f704f656c6261
+      }
+      2: "AssignVariableOp"
+      3: "assignvariableop_2_dense_1_kernel"
+      3: "Identity_2:output:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1: ""
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1 {
+          8: 0x7261566e67697373
+          13: 0x325f704f656c6261
+        }
+      }
+    }
+    3 {
+      1: "Identity_3"
+      2: "Identity"
+      3: "RestoreV2:tensors:3"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              3: 1
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity_3"
+      }
+    }
+    3 {
+      1 {
+        8: 0x7261566e67697373
+        13: 0x335f704f656c6261
+      }
+      2: "AssignVariableOp"
+      3: "assignvariableop_3_dense_1_bias"
+      3: "Identity_3:output:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1: ""
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1 {
+          8: 0x7261566e67697373
+          13: 0x335f704f656c6261
+        }
+      }
+    }
+    3 {
+      1: "Identity_4"
+      2: "Identity"
+      3: "RestoreV2:tensors:4"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              3: 1
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity_4"
+      }
+    }
+    3 {
+      1 {
+        8: 0x7261566e67697373
+        13: 0x345f704f656c6261
+      }
+      2: "AssignVariableOp"
+      3: "assignvariableop_4_dense_2_kernel"
+      3: "Identity_4:output:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1: ""
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1 {
+          8: 0x7261566e67697373
+          13: 0x345f704f656c6261
+        }
+      }
+    }
+    3 {
+      1: "Identity_5"
+      2: "Identity"
+      3: "RestoreV2:tensors:5"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              3: 1
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity_5"
+      }
+    }
+    3 {
+      1 {
+        8: 0x7261566e67697373
+        13: 0x355f704f656c6261
+      }
+      2: "AssignVariableOp"
+      3: "assignvariableop_5_dense_2_bias"
+      3: "Identity_5:output:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1: ""
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1 {
+          8: 0x7261566e67697373
+          13: 0x355f704f656c6261
+        }
+      }
+    }
+    3 {
+      1: "Identity_6"
+      2: "Identity"
+      3: "RestoreV2:tensors:6"
+      5 {
+        1: "T"
+        2 {
+          6: 9
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              3: 1
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity_6"
+      }
+    }
+    3 {
+      1 {
+        8: 0x7261566e67697373
+        13: 0x365f704f656c6261
+      }
+      2: "AssignVariableOp"
+      3: "assignvariableop_6_rmsprop_iter"
+      3: "Identity_6:output:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1: ""
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 9
+        }
+      }
+      6 {
+        1 {
+          8: 0x7261566e67697373
+          13: 0x365f704f656c6261
+        }
+      }
+    }
+    3 {
+      1: "Identity_7"
+      2: "Identity"
+      3: "RestoreV2:tensors:7"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              3: 1
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity_7"
+      }
+    }
+    3 {
+      1 {
+        8: 0x7261566e67697373
+        13: 0x375f704f656c6261
+      }
+      2: "AssignVariableOp"
+      3: "assignvariableop_7_rmsprop_decay"
+      3: "Identity_7:output:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1: ""
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1 {
+          8: 0x7261566e67697373
+          13: 0x375f704f656c6261
+        }
+      }
+    }
+    3 {
+      1: "Identity_8"
+      2: "Identity"
+      3: "RestoreV2:tensors:8"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              3: 1
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity_8"
+      }
+    }
+    3 {
+      1 {
+        8: 0x7261566e67697373
+        13: 0x385f704f656c6261
+      }
+      2: "AssignVariableOp"
+      3: "assignvariableop_8_rmsprop_learning_rate"
+      3: "Identity_8:output:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1: ""
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1 {
+          8: 0x7261566e67697373
+          13: 0x385f704f656c6261
+        }
+      }
+    }
+    3 {
+      1: "Identity_9"
+      2: "Identity"
+      3: "RestoreV2:tensors:9"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              3: 1
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity_9"
+      }
+    }
+    3 {
+      1 {
+        8: 0x7261566e67697373
+        13: 0x395f704f656c6261
+      }
+      2: "AssignVariableOp"
+      3: "assignvariableop_9_rmsprop_momentum"
+      3: "Identity_9:output:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1: ""
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1 {
+          8: 0x7261566e67697373
+          13: 0x395f704f656c6261
+        }
+      }
+    }
+    3 {
+      1: "Identity_10"
+      2: "Identity"
+      3: "RestoreV2:tensors:10"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              3: 1
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity_10"
+      }
+    }
+    3 {
+      1: "AssignVariableOp_10"
+      2: "AssignVariableOp"
+      3: "assignvariableop_10_rmsprop_rho"
+      3: "Identity_10:output:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1: ""
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "AssignVariableOp_10"
+      }
+    }
+    3 {
+      1: "Identity_11"
+      2: "Identity"
+      3: "RestoreV2:tensors:11"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              3: 1
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity_11"
+      }
+    }
+    3 {
+      1: "AssignVariableOp_11"
+      2: "AssignVariableOp"
+      3: "assignvariableop_11_total"
+      3: "Identity_11:output:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1: ""
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "AssignVariableOp_11"
+      }
+    }
+    3 {
+      1: "Identity_12"
+      2: "Identity"
+      3: "RestoreV2:tensors:12"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              3: 1
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity_12"
+      }
+    }
+    3 {
+      1: "AssignVariableOp_12"
+      2: "AssignVariableOp"
+      3: "assignvariableop_12_count"
+      3: "Identity_12:output:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1: ""
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "AssignVariableOp_12"
+      }
+    }
+    3 {
+      1: "Identity_13"
+      2: "Identity"
+      3: "RestoreV2:tensors:13"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              3: 1
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity_13"
+      }
+    }
+    3 {
+      1: "AssignVariableOp_13"
+      2: "AssignVariableOp"
+      3: "assignvariableop_13_total_1"
+      3: "Identity_13:output:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1: ""
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "AssignVariableOp_13"
+      }
+    }
+    3 {
+      1: "Identity_14"
+      2: "Identity"
+      3: "RestoreV2:tensors:14"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              3: 1
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity_14"
+      }
+    }
+    3 {
+      1: "AssignVariableOp_14"
+      2: "AssignVariableOp"
+      3: "assignvariableop_14_count_1"
+      3: "Identity_14:output:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1: ""
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "AssignVariableOp_14"
+      }
+    }
+    3 {
+      1: "Identity_15"
+      2: "Identity"
+      3: "RestoreV2:tensors:15"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              3: 1
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity_15"
+      }
+    }
+    3 {
+      1: "AssignVariableOp_15"
+      2: "AssignVariableOp"
+      3: "assignvariableop_15_rmsprop_dense_kernel_rms"
+      3: "Identity_15:output:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1: ""
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "AssignVariableOp_15"
+      }
+    }
+    3 {
+      1: "Identity_16"
+      2: "Identity"
+      3: "RestoreV2:tensors:16"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              3: 1
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity_16"
+      }
+    }
+    3 {
+      1: "AssignVariableOp_16"
+      2: "AssignVariableOp"
+      3: "assignvariableop_16_rmsprop_dense_bias_rms"
+      3: "Identity_16:output:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1: ""
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "AssignVariableOp_16"
+      }
+    }
+    3 {
+      1: "Identity_17"
+      2: "Identity"
+      3: "RestoreV2:tensors:17"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              3: 1
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity_17"
+      }
+    }
+    3 {
+      1: "AssignVariableOp_17"
+      2: "AssignVariableOp"
+      3: "assignvariableop_17_rmsprop_dense_1_kernel_rms"
+      3: "Identity_17:output:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1: ""
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "AssignVariableOp_17"
+      }
+    }
+    3 {
+      1: "Identity_18"
+      2: "Identity"
+      3: "RestoreV2:tensors:18"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              3: 1
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity_18"
+      }
+    }
+    3 {
+      1: "AssignVariableOp_18"
+      2: "AssignVariableOp"
+      3: "assignvariableop_18_rmsprop_dense_1_bias_rms"
+      3: "Identity_18:output:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1: ""
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "AssignVariableOp_18"
+      }
+    }
+    3 {
+      1: "Identity_19"
+      2: "Identity"
+      3: "RestoreV2:tensors:19"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              3: 1
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity_19"
+      }
+    }
+    3 {
+      1: "AssignVariableOp_19"
+      2: "AssignVariableOp"
+      3: "assignvariableop_19_rmsprop_dense_2_kernel_rms"
+      3: "Identity_19:output:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1: ""
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "AssignVariableOp_19"
+      }
+    }
+    3 {
+      1: "Identity_20"
+      2: "Identity"
+      3: "RestoreV2:tensors:20"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              3: 1
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity_20"
+      }
+    }
+    3 {
+      1: "AssignVariableOp_20"
+      2: "AssignVariableOp"
+      3: "assignvariableop_20_rmsprop_dense_2_bias_rms"
+      3: "Identity_20:output:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1: ""
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "AssignVariableOp_20"
+      }
+    }
+    3 {
+      1: "RestoreV2_1/tensor_names"
+      2: "Const"
+      4: "/device:CPU:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 7
+        }
+      }
+      5 {
+        1: "value"
+        2 {
+          8 {
+            1: 7
+            2 {
+              2 {
+                1: 1
+              }
+            }
+            8: "_CHECKPOINTABLE_OBJECT_GRAPH"
+          }
+        }
+      }
+      6 {
+        1: "RestoreV2_1/tensor_names"
+      }
+    }
+    3 {
+      1: "RestoreV2_1/shape_and_slices"
+      2: "Const"
+      4: "/device:CPU:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 7
+        }
+      }
+      5 {
+        1: "value"
+        2 {
+          8 {
+            1: 7
+            2 {
+              2 {
+                1: 1
+              }
+            }
+            8: ""
+          }
+        }
+      }
+      6 {
+        1: "RestoreV2_1/shape_and_slices"
+      }
+    }
+    3 {
+      1: "RestoreV2_1"
+      2: "RestoreV2"
+      3: "file_prefix"
+      3: "RestoreV2_1/tensor_names:output:0"
+      3: "RestoreV2_1/shape_and_slices:output:0"
+      3: "^RestoreV2"
+      4: "/device:CPU:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              3: 1
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtypes"
+        2 {
+          1 {
+            6: "\007"
+          }
+        }
+      }
+      6 {
+        1: "RestoreV2_1"
+      }
+    }
+    3 {
+      1: "NoOp"
+      2: "NoOp"
+      4: "/device:CPU:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1: ""
+        }
+      }
+      6 {
+        1: "NoOp"
+      }
+    }
+    3 {
+      1: "Identity_21"
+      2: "Identity"
+      3: "file_prefix"
+      3: "^AssignVariableOp"
+      3: "^AssignVariableOp_1"
+      3: "^AssignVariableOp_10"
+      3: "^AssignVariableOp_11"
+      3: "^AssignVariableOp_12"
+      3: "^AssignVariableOp_13"
+      3: "^AssignVariableOp_14"
+      3: "^AssignVariableOp_15"
+      3: "^AssignVariableOp_16"
+      3: "^AssignVariableOp_17"
+      3: "^AssignVariableOp_18"
+      3: "^AssignVariableOp_19"
+      3: "^AssignVariableOp_2"
+      3: "^AssignVariableOp_20"
+      3: "^AssignVariableOp_3"
+      3: "^AssignVariableOp_4"
+      3: "^AssignVariableOp_5"
+      3: "^AssignVariableOp_6"
+      3: "^AssignVariableOp_7"
+      3: "^AssignVariableOp_8"
+      3: "^AssignVariableOp_9"
+      3: "^NoOp"
+      4: "/device:CPU:0"
+      5 {
+        1: "T"
+        2 {
+          6: 7
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7: ""
+          }
+        }
+      }
+      6 {
+        1: "Identity_21"
+      }
+    }
+    3 {
+      1: "Identity_22"
+      2: "Identity"
+      3: "Identity_21:output:0"
+      3: "^AssignVariableOp"
+      3: "^AssignVariableOp_1"
+      3: "^AssignVariableOp_10"
+      3: "^AssignVariableOp_11"
+      3: "^AssignVariableOp_12"
+      3: "^AssignVariableOp_13"
+      3: "^AssignVariableOp_14"
+      3: "^AssignVariableOp_15"
+      3: "^AssignVariableOp_16"
+      3: "^AssignVariableOp_17"
+      3: "^AssignVariableOp_18"
+      3: "^AssignVariableOp_19"
+      3: "^AssignVariableOp_2"
+      3: "^AssignVariableOp_20"
+      3: "^AssignVariableOp_3"
+      3: "^AssignVariableOp_4"
+      3: "^AssignVariableOp_5"
+      3: "^AssignVariableOp_6"
+      3: "^AssignVariableOp_7"
+      3: "^AssignVariableOp_8"
+      3: "^AssignVariableOp_9"
+      3: "^RestoreV2"
+      3: "^RestoreV2_1"
+      5 {
+        1: "T"
+        2 {
+          6: 7
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7: ""
+          }
+        }
+      }
+      6 {
+        1: "Identity_22"
+      }
+    }
+    4 {
+      1: "identity_22"
+      2: "Identity_22:output:0"
+    }
+    5 {
+      1: "_input_shapes"
+      2 {
+        1 {
+          7: ""
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+        }
+      }
+    }
+    6 {
+      1: "AssignVariableOp"
+      2: "AssignVariableOp"
+    }
+    6 {
+      1 {
+        8: 0x7261566e67697373
+        13: 0x315f704f656c6261
+      }
+      2 {
+        8: 0x7261566e67697373
+        13: 0x315f704f656c6261
+      }
+    }
+    6 {
+      1: "AssignVariableOp_10"
+      2: "AssignVariableOp_10"
+    }
+    6 {
+      1: "AssignVariableOp_11"
+      2: "AssignVariableOp_11"
+    }
+    6 {
+      1: "AssignVariableOp_12"
+      2: "AssignVariableOp_12"
+    }
+    6 {
+      1: "AssignVariableOp_13"
+      2: "AssignVariableOp_13"
+    }
+    6 {
+      1: "AssignVariableOp_14"
+      2: "AssignVariableOp_14"
+    }
+    6 {
+      1: "AssignVariableOp_15"
+      2: "AssignVariableOp_15"
+    }
+    6 {
+      1: "AssignVariableOp_16"
+      2: "AssignVariableOp_16"
+    }
+    6 {
+      1: "AssignVariableOp_17"
+      2: "AssignVariableOp_17"
+    }
+    6 {
+      1: "AssignVariableOp_18"
+      2: "AssignVariableOp_18"
+    }
+    6 {
+      1: "AssignVariableOp_19"
+      2: "AssignVariableOp_19"
+    }
+    6 {
+      1 {
+        8: 0x7261566e67697373
+        13: 0x325f704f656c6261
+      }
+      2 {
+        8: 0x7261566e67697373
+        13: 0x325f704f656c6261
+      }
+    }
+    6 {
+      1: "AssignVariableOp_20"
+      2: "AssignVariableOp_20"
+    }
+    6 {
+      1 {
+        8: 0x7261566e67697373
+        13: 0x335f704f656c6261
+      }
+      2 {
+        8: 0x7261566e67697373
+        13: 0x335f704f656c6261
+      }
+    }
+    6 {
+      1 {
+        8: 0x7261566e67697373
+        13: 0x345f704f656c6261
+      }
+      2 {
+        8: 0x7261566e67697373
+        13: 0x345f704f656c6261
+      }
+    }
+    6 {
+      1 {
+        8: 0x7261566e67697373
+        13: 0x355f704f656c6261
+      }
+      2 {
+        8: 0x7261566e67697373
+        13: 0x355f704f656c6261
+      }
+    }
+    6 {
+      1 {
+        8: 0x7261566e67697373
+        13: 0x365f704f656c6261
+      }
+      2 {
+        8: 0x7261566e67697373
+        13: 0x365f704f656c6261
+      }
+    }
+    6 {
+      1 {
+        8: 0x7261566e67697373
+        13: 0x375f704f656c6261
+      }
+      2 {
+        8: 0x7261566e67697373
+        13: 0x375f704f656c6261
+      }
+    }
+    6 {
+      1 {
+        8: 0x7261566e67697373
+        13: 0x385f704f656c6261
+      }
+      2 {
+        8: 0x7261566e67697373
+        13: 0x385f704f656c6261
+      }
+    }
+    6 {
+      1 {
+        8: 0x7261566e67697373
+        13: 0x395f704f656c6261
+      }
+      2 {
+        8: 0x7261566e67697373
+        13: 0x395f704f656c6261
+      }
+    }
+    6 {
+      1: "RestoreV2"
+      2: "RestoreV2"
+    }
+    6 {
+      1: "RestoreV2_1"
+      2: "RestoreV2_1"
+    }
+    7 {
+      1: 0
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+        1 {
+          1: "_user_specified_name"
+          2 {
+            2: "file_prefix"
+          }
+        }
+      }
+    }
+    7 {
+      1: 1
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 2
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 3
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 4
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 5
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 6
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 7
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 8
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 9
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 10
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 11
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 12
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 13
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 14
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 15
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 16
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 17
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 18
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 19
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 20
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 21
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+  }
+  function {
+    signature {
+      name: "__inference__traced_save_4044"
+      input_arg {
+        name: "file_prefix"
+        type: DT_STRING
+      }
+      input_arg {
+        name: "savev2_dense_kernel_read_readvariableop"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "savev2_dense_bias_read_readvariableop"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "savev2_dense_1_kernel_read_readvariableop"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "savev2_dense_1_bias_read_readvariableop"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "savev2_dense_2_kernel_read_readvariableop"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "savev2_dense_2_bias_read_readvariableop"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "savev2_rmsprop_iter_read_readvariableop"
+        type: DT_INT64
+      }
+      input_arg {
+        name: "savev2_rmsprop_decay_read_readvariableop"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "savev2_rmsprop_learning_rate_read_readvariableop"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "savev2_rmsprop_momentum_read_readvariableop"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "savev2_rmsprop_rho_read_readvariableop"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "savev2_total_read_readvariableop"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "savev2_count_read_readvariableop"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "savev2_total_1_read_readvariableop"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "savev2_count_1_read_readvariableop"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "savev2_rmsprop_dense_kernel_rms_read_readvariableop"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "savev2_rmsprop_dense_bias_rms_read_readvariableop"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "savev2_rmsprop_dense_1_kernel_rms_read_readvariableop"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "savev2_rmsprop_dense_1_bias_rms_read_readvariableop"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "savev2_rmsprop_dense_2_kernel_rms_read_readvariableop"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "savev2_rmsprop_dense_2_bias_rms_read_readvariableop"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "savev2_1_const"
+        type: DT_STRING
+      }
+      output_arg {
+        name: "identity_1"
+        type: DT_STRING
+      }
+      is_stateful: true
+      20: "MergeV2Checkpoints"
+      20: "SaveV2"
+      20: "SaveV2_1"
+    }
+    3 {
+      1: "StaticRegexFullMatch"
+      2: "StaticRegexFullMatch"
+      3: "file_prefix"
+      4: "/device:CPU:*"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7: ""
+          }
+        }
+      }
+      5 {
+        1: "pattern"
+        2 {
+          2: "^s3://.*"
+        }
+      }
+      6 {
+        1: "StaticRegexFullMatch"
+      }
+    }
+    3 {
+      1: "Const"
+      2: "Const"
+      4: "/device:CPU:*"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7: ""
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 7
+        }
+      }
+      5 {
+        1: "value"
+        2 {
+          8 {
+            1: 7
+            2: ""
+            8: ".part"
+          }
+        }
+      }
+      6 {
+        1: "Const"
+      }
+    }
+    3 {
+      1: "Const_1"
+      2: "Const"
+      4: "/device:CPU:*"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7: ""
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 7
+        }
+      }
+      5 {
+        1: "value"
+        2 {
+          8 {
+            1: 7
+            2: ""
+            8: "_temp_26a7881643bb4cccb7438d57cd1e5fe0/part"
+          }
+        }
+      }
+      6 {
+        1: "Const_1"
+      }
+    }
+    3 {
+      1: "Select"
+      2: "Select"
+      3: "StaticRegexFullMatch:output:0"
+      3: "Const:output:0"
+      3: "Const_1:output:0"
+      4: "/device:CPU:*"
+      5 {
+        1: "T"
+        2 {
+          6: 7
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7: ""
+          }
+        }
+      }
+      6 {
+        1: "Select"
+      }
+    }
+    3 {
+      1: "StringJoin"
+      2: "StringJoin"
+      3: "file_prefix"
+      3: "Select:output:0"
+      4: "/device:CPU:*"
+      5 {
+        1: "N"
+        2 {
+          3: 2
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7: ""
+          }
+        }
+      }
+      6 {
+        1: "StringJoin"
+      }
+    }
+    3 {
+      1: "num_shards"
+      2: "Const"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7: ""
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 3
+        }
+      }
+      5 {
+        1: "value"
+        2 {
+          8 {
+            1: 3
+            2: ""
+            7: "\002"
+          }
+        }
+      }
+      6 {
+        1: "num_shards"
+      }
+    }
+    3 {
+      1: "ShardedFilename/shard"
+      2: "Const"
+      4: "/device:CPU:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7: ""
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 3
+        }
+      }
+      5 {
+        1: "value"
+        2 {
+          8 {
+            1: 3
+            2: ""
+            7: "\000"
+          }
+        }
+      }
+      6 {
+        1: "ShardedFilename/shard"
+      }
+    }
+    3 {
+      1: "ShardedFilename"
+      2: "ShardedFilename"
+      3: "StringJoin:output:0"
+      3: "ShardedFilename/shard:output:0"
+      3: "num_shards:output:0"
+      4: "/device:CPU:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7: ""
+          }
+        }
+      }
+      6 {
+        1: "ShardedFilename"
+      }
+    }
+    3 {
+      1: "SaveV2/tensor_names"
+      2: "Const"
+      4: "/device:CPU:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 21
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 7
+        }
+      }
+      5 {
+        1: "value"
+        2 {
+          8 {
+            1: 7
+            2 {
+              2 {
+                1: 21
+              }
+            }
+            8: "layer_with_weights-0/kernel/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "layer_with_weights-0/bias/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "layer_with_weights-1/kernel/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "layer_with_weights-1/bias/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "layer_with_weights-2/kernel/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "layer_with_weights-2/bias/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "optimizer/iter/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "optimizer/decay/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "optimizer/learning_rate/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "optimizer/momentum/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "optimizer/rho/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "keras_api/metrics/0/total/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "keras_api/metrics/0/count/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "keras_api/metrics/1/total/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "keras_api/metrics/1/count/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "layer_with_weights-0/kernel/.OPTIMIZER_SLOT/optimizer/rms/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "layer_with_weights-0/bias/.OPTIMIZER_SLOT/optimizer/rms/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "layer_with_weights-1/kernel/.OPTIMIZER_SLOT/optimizer/rms/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "layer_with_weights-1/bias/.OPTIMIZER_SLOT/optimizer/rms/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "layer_with_weights-2/kernel/.OPTIMIZER_SLOT/optimizer/rms/.ATTRIBUTES/VARIABLE_VALUE"
+            8: "layer_with_weights-2/bias/.OPTIMIZER_SLOT/optimizer/rms/.ATTRIBUTES/VARIABLE_VALUE"
+          }
+        }
+      }
+      6 {
+        1: "SaveV2/tensor_names"
+      }
+    }
+    3 {
+      1: "SaveV2/shape_and_slices"
+      2: "Const"
+      4: "/device:CPU:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 21
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 7
+        }
+      }
+      5 {
+        1: "value"
+        2 {
+          8 {
+            1: 7
+            2 {
+              2 {
+                1: 21
+              }
+            }
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+            8: ""
+          }
+        }
+      }
+      6 {
+        1: "SaveV2/shape_and_slices"
+      }
+    }
+    3 {
+      1: "SaveV2"
+      2: "SaveV2"
+      3: "ShardedFilename:filename:0"
+      3: "SaveV2/tensor_names:output:0"
+      3: "SaveV2/shape_and_slices:output:0"
+      3: "savev2_dense_kernel_read_readvariableop"
+      3: "savev2_dense_bias_read_readvariableop"
+      3: "savev2_dense_1_kernel_read_readvariableop"
+      3: "savev2_dense_1_bias_read_readvariableop"
+      3: "savev2_dense_2_kernel_read_readvariableop"
+      3: "savev2_dense_2_bias_read_readvariableop"
+      3: "savev2_rmsprop_iter_read_readvariableop"
+      3: "savev2_rmsprop_decay_read_readvariableop"
+      3: "savev2_rmsprop_learning_rate_read_readvariableop"
+      3: "savev2_rmsprop_momentum_read_readvariableop"
+      3: "savev2_rmsprop_rho_read_readvariableop"
+      3: "savev2_total_read_readvariableop"
+      3: "savev2_count_read_readvariableop"
+      3: "savev2_total_1_read_readvariableop"
+      3: "savev2_count_1_read_readvariableop"
+      3: "savev2_rmsprop_dense_kernel_rms_read_readvariableop"
+      3: "savev2_rmsprop_dense_bias_rms_read_readvariableop"
+      3: "savev2_rmsprop_dense_1_kernel_rms_read_readvariableop"
+      3: "savev2_rmsprop_dense_1_bias_rms_read_readvariableop"
+      3: "savev2_rmsprop_dense_2_kernel_rms_read_readvariableop"
+      3: "savev2_rmsprop_dense_2_bias_rms_read_readvariableop"
+      4: "/device:CPU:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1: ""
+        }
+      }
+      5 {
+        1: "dtypes"
+        2 {
+          1 {
+            6: "\001\001\001\001\001\001\t\001\001\001\001\001\001\001\001\001\001\001\001\001\001"
+          }
+        }
+      }
+      6 {
+        1: "SaveV2"
+      }
+    }
+    3 {
+      1: "ShardedFilename_1/shard"
+      2: "Const"
+      4: "/device:CPU:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7: ""
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 3
+        }
+      }
+      5 {
+        1: "value"
+        2 {
+          8 {
+            1: 3
+            2: ""
+            7: "\001"
+          }
+        }
+      }
+      6 {
+        1: "ShardedFilename_1/shard"
+      }
+    }
+    3 {
+      1: "ShardedFilename_1"
+      2: "ShardedFilename"
+      3: "StringJoin:output:0"
+      3: "ShardedFilename_1/shard:output:0"
+      3: "num_shards:output:0"
+      4: "/device:CPU:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7: ""
+          }
+        }
+      }
+      6 {
+        1: "ShardedFilename_1"
+      }
+    }
+    3 {
+      1: "SaveV2_1/tensor_names"
+      2: "Const"
+      4: "/device:CPU:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 7
+        }
+      }
+      5 {
+        1: "value"
+        2 {
+          8 {
+            1: 7
+            2 {
+              2 {
+                1: 1
+              }
+            }
+            8: "_CHECKPOINTABLE_OBJECT_GRAPH"
+          }
+        }
+      }
+      6 {
+        1: "SaveV2_1/tensor_names"
+      }
+    }
+    3 {
+      1: "SaveV2_1/shape_and_slices"
+      2: "Const"
+      4: "/device:CPU:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 7
+        }
+      }
+      5 {
+        1: "value"
+        2 {
+          8 {
+            1: 7
+            2 {
+              2 {
+                1: 1
+              }
+            }
+            8: ""
+          }
+        }
+      }
+      6 {
+        1: "SaveV2_1/shape_and_slices"
+      }
+    }
+    3 {
+      1: "SaveV2_1"
+      2: "SaveV2"
+      3: "ShardedFilename_1:filename:0"
+      3: "SaveV2_1/tensor_names:output:0"
+      3: "SaveV2_1/shape_and_slices:output:0"
+      3: "savev2_1_const"
+      3: "^SaveV2"
+      4: "/device:CPU:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1: ""
+        }
+      }
+      5 {
+        1: "dtypes"
+        2 {
+          1 {
+            6: "\007"
+          }
+        }
+      }
+      6 {
+        1: "SaveV2_1"
+      }
+    }
+    3 {
+      1: "MergeV2Checkpoints/checkpoint_prefixes"
+      2: "Pack"
+      3: "ShardedFilename:filename:0"
+      3: "ShardedFilename_1:filename:0"
+      3: "^SaveV2"
+      3: "^SaveV2_1"
+      4: "/device:CPU:0"
+      5 {
+        1: "N"
+        2 {
+          3: 2
+        }
+      }
+      5 {
+        1: "T"
+        2 {
+          6: 7
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 2
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "MergeV2Checkpoints/checkpoint_prefixes"
+      }
+    }
+    3 {
+      1: "MergeV2Checkpoints"
+      2: "MergeV2Checkpoints"
+      3: "MergeV2Checkpoints/checkpoint_prefixes:output:0"
+      3: "file_prefix"
+      3: "^SaveV2_1"
+      4: "/device:CPU:0"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1: ""
+        }
+      }
+      6 {
+        1: "MergeV2Checkpoints"
+      }
+    }
+    3 {
+      1: "Identity"
+      2: "Identity"
+      3: "file_prefix"
+      3: "^MergeV2Checkpoints"
+      4: "/device:CPU:0"
+      5 {
+        1: "T"
+        2 {
+          6: 7
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7: ""
+          }
+        }
+      }
+      6 {
+        1: "Identity"
+      }
+    }
+    3 {
+      1: "Identity_1"
+      2: "Identity"
+      3: "Identity:output:0"
+      3: "^MergeV2Checkpoints"
+      3: "^SaveV2"
+      3: "^SaveV2_1"
+      5 {
+        1: "T"
+        2 {
+          6: 7
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7: ""
+          }
+        }
+      }
+      6 {
+        1: "Identity_1"
+      }
+    }
+    4 {
+      1: "identity_1"
+      2: "Identity_1:output:0"
+    }
+    5 {
+      1: "_input_shapes"
+      2 {
+        1 {
+          7: ""
+          7 {
+            2 {
+              1: 10
+            }
+            2 {
+              1: 100
+            }
+          }
+          7 {
+            2 {
+              1: 100
+            }
+          }
+          7 {
+            2 {
+              1: 100
+            }
+            2 {
+              1: 50
+            }
+          }
+          7 {
+            2 {
+              1: 50
+            }
+          }
+          7 {
+            2 {
+              1: 50
+            }
+            2 {
+              1: 1
+            }
+          }
+          7 {
+            2 {
+              1: 1
+            }
+          }
+          7: ""
+          7: ""
+          7: ""
+          7: ""
+          7: ""
+          7: ""
+          7: ""
+          7: ""
+          7: ""
+          7 {
+            2 {
+              1: 10
+            }
+            2 {
+              1: 100
+            }
+          }
+          7 {
+            2 {
+              1: 100
+            }
+          }
+          7 {
+            2 {
+              1: 100
+            }
+            2 {
+              1: 50
+            }
+          }
+          7 {
+            2 {
+              1: 50
+            }
+          }
+          7 {
+            2 {
+              1: 50
+            }
+            2 {
+              1: 1
+            }
+          }
+          7 {
+            2 {
+              1: 1
+            }
+          }
+          7: ""
+        }
+      }
+    }
+    6 {
+      1: "MergeV2Checkpoints"
+      2: "MergeV2Checkpoints"
+    }
+    6 {
+      1: "SaveV2"
+      2: "SaveV2"
+    }
+    6 {
+      1: "SaveV2_1"
+      2: "SaveV2_1"
+    }
+    7 {
+      1: 0
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+        1 {
+          1: "_user_specified_name"
+          2 {
+            2: "file_prefix"
+          }
+        }
+      }
+    }
+    7 {
+      1: 1
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 10
+                }
+                2 {
+                  1: 100
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 2
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 100
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 3
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 100
+                }
+                2 {
+                  1: 50
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 4
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 50
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 5
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 50
+                }
+                2 {
+                  1: 1
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 6
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 1
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 7
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 8
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 9
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 10
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 11
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 12
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 13
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 14
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 15
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 16
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 10
+                }
+                2 {
+                  1: 100
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 17
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 100
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 18
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 100
+                }
+                2 {
+                  1: 50
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 19
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 50
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 20
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 50
+                }
+                2 {
+                  1: 1
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 21
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 1
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 22
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+  }
+  function {
+    signature {
+      name: "__inference_sequential_layer_call_and_return_conditional_losses_3835"
+      input_arg {
+        name: "inputs"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "dense_matmul_readvariableop_resource"
+        type: 20
+      }
+      input_arg {
+        name: "dense_biasadd_readvariableop_resource"
+        type: 20
+      }
+      input_arg {
+        name: "dense_1_matmul_readvariableop_resource"
+        type: 20
+      }
+      input_arg {
+        name: "dense_1_biasadd_readvariableop_resource"
+        type: 20
+      }
+      input_arg {
+        name: "dense_2_matmul_readvariableop_resource"
+        type: 20
+      }
+      input_arg {
+        name: "dense_2_biasadd_readvariableop_resource"
+        type: 20
+      }
+      output_arg {
+        name: "identity"
+        type: DT_FLOAT
+      }
+      is_stateful: true
+    }
+    3 {
+      1: "dense/MatMul/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "dense_matmul_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 10
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "dense/MatMul/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "dense/MatMul"
+      2: "MatMul"
+      3: "inputs"
+      3: "dense/MatMul/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "dense/MatMul"
+      }
+    }
+    3 {
+      1: "dense/BiasAdd/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "dense_biasadd_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "dense/BiasAdd/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "dense/BiasAdd"
+      2: "BiasAdd"
+      3: "dense/MatMul:product:0"
+      3: "dense/BiasAdd/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "dense/BiasAdd"
+      }
+    }
+    3 {
+      1: "dense/Relu"
+      2: "Relu"
+      3: "dense/BiasAdd:output:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "dense/Relu"
+      }
+    }
+    3 {
+      1: "dense_1/MatMul/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "dense_1_matmul_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 100
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "dense_1/MatMul/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "dense_1/MatMul"
+      2: "MatMul"
+      3: "dense/Relu:activations:0"
+      3: "dense_1/MatMul/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "dense_1/MatMul"
+      }
+    }
+    3 {
+      1: "dense_1/BiasAdd/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "dense_1_biasadd_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "dense_1/BiasAdd/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "dense_1/BiasAdd"
+      2: "BiasAdd"
+      3: "dense_1/MatMul:product:0"
+      3: "dense_1/BiasAdd/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "dense_1/BiasAdd"
+      }
+    }
+    3 {
+      1: "dense_1/Relu"
+      2: "Relu"
+      3: "dense_1/BiasAdd:output:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "dense_1/Relu"
+      }
+    }
+    3 {
+      1: "dense_2/MatMul/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "dense_2_matmul_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 50
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "dense_2/MatMul/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "dense_2/MatMul"
+      2: "MatMul"
+      3: "dense_1/Relu:activations:0"
+      3: "dense_2/MatMul/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "dense_2/MatMul"
+      }
+    }
+    3 {
+      1: "dense_2/BiasAdd/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "dense_2_biasadd_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "dense_2/BiasAdd/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "dense_2/BiasAdd"
+      2: "BiasAdd"
+      3: "dense_2/MatMul:product:0"
+      3: "dense_2/BiasAdd/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "dense_2/BiasAdd"
+      }
+    }
+    3 {
+      1: "dense_2/Sigmoid"
+      2: "Sigmoid"
+      3: "dense_2/BiasAdd:output:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "dense_2/Sigmoid"
+      }
+    }
+    3 {
+      1: "Identity"
+      2: "Identity"
+      3: "dense_2/Sigmoid:y:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity"
+      }
+    }
+    4 {
+      1: "identity"
+      2: "Identity:output:0"
+    }
+    5 {
+      1: "_input_shapes"
+      2 {
+        1 {
+          7 {
+            2 {
+              1: 18446744073709551615
+            }
+            2 {
+              1: 10
+            }
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+        }
+      }
+    }
+    7 {
+      1: 0
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 18446744073709551615
+                }
+                2 {
+                  1: 10
+                }
+              }
+            }
+          }
+        }
+        1 {
+          1: "_user_specified_name"
+          2 {
+            2: "inputs"
+          }
+        }
+      }
+    }
+    7 {
+      1: 1
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 2
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 3
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 4
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 5
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 6
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+  }
+  function {
+    signature {
+      name: "__inference_sequential_layer_call_fn_3747"
+      input_arg {
+        name: "dense_input"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "unknown"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_0"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_1"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_2"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_3"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_4"
+        type: 20
+      }
+      output_arg {
+        name: "identity"
+        type: DT_FLOAT
+      }
+      is_stateful: true
+      20: "StatefulPartitionedCall"
+    }
+    3 {
+      1: "StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+      3: "dense_input"
+      3: "unknown"
+      3: "unknown_0"
+      3: "unknown_1"
+      3: "unknown_2"
+      3: "unknown_3"
+      3: "unknown_4"
+      5 {
+        1: "Tin"
+        2 {
+          1 {
+            6: "\001\024\024\024\024\024\024"
+          }
+        }
+      }
+      5 {
+        1: "Tout"
+        2 {
+          1 {
+            6: "\001"
+          }
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "_read_only_resource_inputs"
+        2 {
+          1 {
+            3: "\001\002\003\004\005\006"
+          }
+        }
+      }
+      5 {
+        1: "config_proto"
+        2 {
+          2 {
+            1 {
+              1: "GPU"
+              2: 0
+            }
+            1 {
+              1: "CPU"
+              2: 1
+            }
+            6 {
+              9: ""
+            }
+            7: 1
+          }
+        }
+      }
+      5 {
+        1: "f"
+        2 {
+          10 {
+            1: "__inference_sequential_layer_call_and_return_conditional_losses_3732"
+          }
+        }
+      }
+      6 {
+        1: "StatefulPartitionedCall"
+      }
+    }
+    3 {
+      1: "Identity"
+      2: "Identity"
+      3: "StatefulPartitionedCall:output:0"
+      3: "^StatefulPartitionedCall"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity"
+      }
+    }
+    4 {
+      1: "identity"
+      2: "Identity:output:0"
+    }
+    5 {
+      1: "_input_shapes"
+      2 {
+        1 {
+          7 {
+            2 {
+              1: 18446744073709551615
+            }
+            2 {
+              1: 10
+            }
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+        }
+      }
+    }
+    6 {
+      1: "StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+    }
+    7 {
+      1: 0
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 18446744073709551615
+                }
+                2 {
+                  1: 10
+                }
+              }
+            }
+          }
+        }
+        1 {
+          1: "_user_specified_name"
+          2 {
+            2: "dense_input"
+          }
+        }
+      }
+    }
+    7 {
+      1: 1
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 2
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 3
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 4
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 5
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 6
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+  }
+  function {
+    signature {
+      name: "__inference_sequential_layer_call_and_return_conditional_losses_3732"
+      input_arg {
+        name: "inputs"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "dense_3716"
+        type: 20
+      }
+      input_arg {
+        name: "dense_3718"
+        type: 20
+      }
+      input_arg {
+        name: "dense_1_3721"
+        type: 20
+      }
+      input_arg {
+        name: "dense_1_3723"
+        type: 20
+      }
+      input_arg {
+        name: "dense_2_3726"
+        type: 20
+      }
+      input_arg {
+        name: "dense_2_3728"
+        type: 20
+      }
+      output_arg {
+        name: "identity"
+        type: DT_FLOAT
+      }
+      is_stateful: true
+      20: "dense/StatefulPartitionedCall"
+      20: "dense_1/StatefulPartitionedCall"
+      20: "dense_2/StatefulPartitionedCall"
+    }
+    3 {
+      1: "dense/StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+      3: "inputs"
+      3: "dense_3716"
+      3: "dense_3718"
+      5 {
+        1: "Tin"
+        2 {
+          1 {
+            6: "\001\024\024"
+          }
+        }
+      }
+      5 {
+        1: "Tout"
+        2 {
+          1 {
+            6: "\001"
+          }
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "_read_only_resource_inputs"
+        2 {
+          1 {
+            3: "\001\002"
+          }
+        }
+      }
+      5 {
+        1: "config_proto"
+        2 {
+          2 {
+            1 {
+              1: "GPU"
+              2: 0
+            }
+            1 {
+              1: "CPU"
+              2: 1
+            }
+            6 {
+              9: ""
+            }
+            7: 1
+          }
+        }
+      }
+      5 {
+        1: "f"
+        2 {
+          10 {
+            1: "__inference_dense_layer_call_and_return_conditional_losses_3620"
+          }
+        }
+      }
+      6 {
+        1: "dense/StatefulPartitionedCall"
+      }
+    }
+    3 {
+      1: "dense_1/StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+      3: "dense/StatefulPartitionedCall:output:0"
+      3: "dense_1_3721"
+      3: "dense_1_3723"
+      5 {
+        1: "Tin"
+        2 {
+          1 {
+            6: "\001\024\024"
+          }
+        }
+      }
+      5 {
+        1: "Tout"
+        2 {
+          1 {
+            6: "\001"
+          }
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "_read_only_resource_inputs"
+        2 {
+          1 {
+            3: "\001\002"
+          }
+        }
+      }
+      5 {
+        1: "config_proto"
+        2 {
+          2 {
+            1 {
+              1: "GPU"
+              2: 0
+            }
+            1 {
+              1: "CPU"
+              2: 1
+            }
+            6 {
+              9: ""
+            }
+            7: 1
+          }
+        }
+      }
+      5 {
+        1: "f"
+        2 {
+          10 {
+            1: "__inference_dense_1_layer_call_and_return_conditional_losses_3647"
+          }
+        }
+      }
+      6 {
+        1: "dense_1/StatefulPartitionedCall"
+      }
+    }
+    3 {
+      1: "dense_2/StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+      3: "dense_1/StatefulPartitionedCall:output:0"
+      3: "dense_2_3726"
+      3: "dense_2_3728"
+      5 {
+        1: "Tin"
+        2 {
+          1 {
+            6: "\001\024\024"
+          }
+        }
+      }
+      5 {
+        1: "Tout"
+        2 {
+          1 {
+            6: "\001"
+          }
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "_read_only_resource_inputs"
+        2 {
+          1 {
+            3: "\001\002"
+          }
+        }
+      }
+      5 {
+        1: "config_proto"
+        2 {
+          2 {
+            1 {
+              1: "GPU"
+              2: 0
+            }
+            1 {
+              1: "CPU"
+              2: 1
+            }
+            6 {
+              9: ""
+            }
+            7: 1
+          }
+        }
+      }
+      5 {
+        1: "f"
+        2 {
+          10 {
+            1: "__inference_dense_2_layer_call_and_return_conditional_losses_3674"
+          }
+        }
+      }
+      6 {
+        1: "dense_2/StatefulPartitionedCall"
+      }
+    }
+    3 {
+      1: "Identity"
+      2: "Identity"
+      3: "dense_2/StatefulPartitionedCall:output:0"
+      3: "^dense/StatefulPartitionedCall"
+      3: "^dense_1/StatefulPartitionedCall"
+      3: "^dense_2/StatefulPartitionedCall"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity"
+      }
+    }
+    4 {
+      1: "identity"
+      2: "Identity:output:0"
+    }
+    5 {
+      1: "_input_shapes"
+      2 {
+        1 {
+          7 {
+            2 {
+              1: 18446744073709551615
+            }
+            2 {
+              1: 10
+            }
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+        }
+      }
+    }
+    6 {
+      1: "dense/StatefulPartitionedCall"
+      2: "dense/StatefulPartitionedCall"
+    }
+    6 {
+      1: "dense_1/StatefulPartitionedCall"
+      2: "dense_1/StatefulPartitionedCall"
+    }
+    6 {
+      1: "dense_2/StatefulPartitionedCall"
+      2: "dense_2/StatefulPartitionedCall"
+    }
+    7 {
+      1: 0
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 18446744073709551615
+                }
+                2 {
+                  1: 10
+                }
+              }
+            }
+          }
+        }
+        1 {
+          1: "_user_specified_name"
+          2 {
+            2: "inputs"
+          }
+        }
+      }
+    }
+    7 {
+      1: 1
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 2
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 3
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 4
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 5
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 6
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+  }
+  function {
+    signature {
+      name: "__inference_dense_2_layer_call_fn_3954"
+      input_arg {
+        name: "inputs"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "unknown"
+        type: 20
+      }
+      input_arg {
+        name: "unknown_0"
+        type: 20
+      }
+      output_arg {
+        name: "identity"
+        type: DT_FLOAT
+      }
+      is_stateful: true
+      20: "StatefulPartitionedCall"
+    }
+    3 {
+      1: "StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+      3: "inputs"
+      3: "unknown"
+      3: "unknown_0"
+      5 {
+        1: "Tin"
+        2 {
+          1 {
+            6: "\001\024\024"
+          }
+        }
+      }
+      5 {
+        1: "Tout"
+        2 {
+          1 {
+            6: "\001"
+          }
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "_read_only_resource_inputs"
+        2 {
+          1 {
+            3: "\001\002"
+          }
+        }
+      }
+      5 {
+        1: "config_proto"
+        2 {
+          2 {
+            1 {
+              1: "GPU"
+              2: 0
+            }
+            1 {
+              1: "CPU"
+              2: 1
+            }
+            6 {
+              9: ""
+            }
+            7: 1
+          }
+        }
+      }
+      5 {
+        1: "f"
+        2 {
+          10 {
+            1: "__inference_dense_2_layer_call_and_return_conditional_losses_3674"
+          }
+        }
+      }
+      6 {
+        1: "StatefulPartitionedCall"
+      }
+    }
+    3 {
+      1: "Identity"
+      2: "Identity"
+      3: "StatefulPartitionedCall:output:0"
+      3: "^StatefulPartitionedCall"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity"
+      }
+    }
+    4 {
+      1: "identity"
+      2: "Identity:output:0"
+    }
+    5 {
+      1: "_input_shapes"
+      2 {
+        1 {
+          7 {
+            2 {
+              1: 18446744073709551615
+            }
+            2 {
+              1: 50
+            }
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+        }
+      }
+    }
+    6 {
+      1: "StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+    }
+    7 {
+      1: 0
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 18446744073709551615
+                }
+                2 {
+                  1: 50
+                }
+              }
+            }
+          }
+        }
+        1 {
+          1: "_user_specified_name"
+          2 {
+            2: "inputs"
+          }
+        }
+      }
+    }
+    7 {
+      1: 1
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 2
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+  }
+  function {
+    signature {
+      name: "__inference_dense_1_layer_call_and_return_conditional_losses_3647"
+      input_arg {
+        name: "inputs"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "matmul_readvariableop_resource"
+        type: 20
+      }
+      input_arg {
+        name: "biasadd_readvariableop_resource"
+        type: 20
+      }
+      output_arg {
+        name: "identity"
+        type: DT_FLOAT
+      }
+      is_stateful: true
+    }
+    3 {
+      1: "MatMul/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "matmul_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 100
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "MatMul/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "MatMul"
+      2: "MatMul"
+      3: "inputs"
+      3: "MatMul/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "MatMul"
+      }
+    }
+    3 {
+      1: "BiasAdd/ReadVariableOp"
+      2: "ReadVariableOp"
+      3: "biasadd_readvariableop_resource"
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "dtype"
+        2 {
+          6: 1
+        }
+      }
+      6 {
+        1: "BiasAdd/ReadVariableOp"
+      }
+    }
+    3 {
+      1: "BiasAdd"
+      2: "BiasAdd"
+      3: "MatMul:product:0"
+      3: "BiasAdd/ReadVariableOp:value:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "BiasAdd"
+      }
+    }
+    3 {
+      1: "Relu"
+      2: "Relu"
+      3: "BiasAdd:output:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Relu"
+      }
+    }
+    3 {
+      1: "Identity"
+      2: "Identity"
+      3: "Relu:activations:0"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity"
+      }
+    }
+    4 {
+      1: "identity"
+      2: "Identity:output:0"
+    }
+    5 {
+      1: "_input_shapes"
+      2 {
+        1 {
+          7 {
+            2 {
+              1: 18446744073709551615
+            }
+            2 {
+              1: 100
+            }
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+        }
+      }
+    }
+    7 {
+      1: 0
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 18446744073709551615
+                }
+                2 {
+                  1: 100
+                }
+              }
+            }
+          }
+        }
+        1 {
+          1: "_user_specified_name"
+          2 {
+            2: "inputs"
+          }
+        }
+      }
+    }
+    7 {
+      1: 1
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 2
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+  }
+  function {
+    signature {
+      name: "__inference_sequential_layer_call_and_return_conditional_losses_3691"
+      input_arg {
+        name: "dense_input"
+        type: DT_FLOAT
+      }
+      input_arg {
+        name: "dense_3631"
+        type: 20
+      }
+      input_arg {
+        name: "dense_3633"
+        type: 20
+      }
+      input_arg {
+        name: "dense_1_3658"
+        type: 20
+      }
+      input_arg {
+        name: "dense_1_3660"
+        type: 20
+      }
+      input_arg {
+        name: "dense_2_3685"
+        type: 20
+      }
+      input_arg {
+        name: "dense_2_3687"
+        type: 20
+      }
+      output_arg {
+        name: "identity"
+        type: DT_FLOAT
+      }
+      is_stateful: true
+      20: "dense/StatefulPartitionedCall"
+      20: "dense_1/StatefulPartitionedCall"
+      20: "dense_2/StatefulPartitionedCall"
+    }
+    3 {
+      1: "dense/StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+      3: "dense_input"
+      3: "dense_3631"
+      3: "dense_3633"
+      5 {
+        1: "Tin"
+        2 {
+          1 {
+            6: "\001\024\024"
+          }
+        }
+      }
+      5 {
+        1: "Tout"
+        2 {
+          1 {
+            6: "\001"
+          }
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 100
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "_read_only_resource_inputs"
+        2 {
+          1 {
+            3: "\001\002"
+          }
+        }
+      }
+      5 {
+        1: "config_proto"
+        2 {
+          2 {
+            1 {
+              1: "GPU"
+              2: 0
+            }
+            1 {
+              1: "CPU"
+              2: 1
+            }
+            6 {
+              9: ""
+            }
+            7: 1
+          }
+        }
+      }
+      5 {
+        1: "f"
+        2 {
+          10 {
+            1: "__inference_dense_layer_call_and_return_conditional_losses_3620"
+          }
+        }
+      }
+      6 {
+        1: "dense/StatefulPartitionedCall"
+      }
+    }
+    3 {
+      1: "dense_1/StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+      3: "dense/StatefulPartitionedCall:output:0"
+      3: "dense_1_3658"
+      3: "dense_1_3660"
+      5 {
+        1: "Tin"
+        2 {
+          1 {
+            6: "\001\024\024"
+          }
+        }
+      }
+      5 {
+        1: "Tout"
+        2 {
+          1 {
+            6: "\001"
+          }
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 50
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "_read_only_resource_inputs"
+        2 {
+          1 {
+            3: "\001\002"
+          }
+        }
+      }
+      5 {
+        1: "config_proto"
+        2 {
+          2 {
+            1 {
+              1: "GPU"
+              2: 0
+            }
+            1 {
+              1: "CPU"
+              2: 1
+            }
+            6 {
+              9: ""
+            }
+            7: 1
+          }
+        }
+      }
+      5 {
+        1: "f"
+        2 {
+          10 {
+            1: "__inference_dense_1_layer_call_and_return_conditional_losses_3647"
+          }
+        }
+      }
+      6 {
+        1: "dense_1/StatefulPartitionedCall"
+      }
+    }
+    3 {
+      1: "dense_2/StatefulPartitionedCall"
+      2: "StatefulPartitionedCall"
+      3: "dense_1/StatefulPartitionedCall:output:0"
+      3: "dense_2_3685"
+      3: "dense_2_3687"
+      5 {
+        1: "Tin"
+        2 {
+          1 {
+            6: "\001\024\024"
+          }
+        }
+      }
+      5 {
+        1: "Tout"
+        2 {
+          1 {
+            6: "\001"
+          }
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      5 {
+        1: "_read_only_resource_inputs"
+        2 {
+          1 {
+            3: "\001\002"
+          }
+        }
+      }
+      5 {
+        1: "config_proto"
+        2 {
+          2 {
+            1 {
+              1: "GPU"
+              2: 0
+            }
+            1 {
+              1: "CPU"
+              2: 1
+            }
+            6 {
+              9: ""
+            }
+            7: 1
+          }
+        }
+      }
+      5 {
+        1: "f"
+        2 {
+          10 {
+            1: "__inference_dense_2_layer_call_and_return_conditional_losses_3674"
+          }
+        }
+      }
+      6 {
+        1: "dense_2/StatefulPartitionedCall"
+      }
+    }
+    3 {
+      1: "Identity"
+      2: "Identity"
+      3: "dense_2/StatefulPartitionedCall:output:0"
+      3: "^dense/StatefulPartitionedCall"
+      3: "^dense_1/StatefulPartitionedCall"
+      3: "^dense_2/StatefulPartitionedCall"
+      5 {
+        1: "T"
+        2 {
+          6: 1
+        }
+      }
+      5 {
+        1: "_output_shapes"
+        2 {
+          1 {
+            7 {
+              2 {
+                1: 18446744073709551615
+              }
+              2 {
+                1: 1
+              }
+            }
+          }
+        }
+      }
+      6 {
+        1: "Identity"
+      }
+    }
+    4 {
+      1: "identity"
+      2: "Identity:output:0"
+    }
+    5 {
+      1: "_input_shapes"
+      2 {
+        1 {
+          7 {
+            2 {
+              1: 18446744073709551615
+            }
+            2 {
+              1: 10
+            }
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+          7 {
+            3: 1
+          }
+        }
+      }
+    }
+    6 {
+      1: "dense/StatefulPartitionedCall"
+      2: "dense/StatefulPartitionedCall"
+    }
+    6 {
+      1: "dense_1/StatefulPartitionedCall"
+      2: "dense_1/StatefulPartitionedCall"
+    }
+    6 {
+      1: "dense_2/StatefulPartitionedCall"
+      2: "dense_2/StatefulPartitionedCall"
+    }
+    7 {
+      1: 0
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7 {
+                2 {
+                  1: 18446744073709551615
+                }
+                2 {
+                  1: 10
+                }
+              }
+            }
+          }
+        }
+        1 {
+          1: "_user_specified_name"
+          2 {
+            2: "dense_input"
+          }
+        }
+      }
+    }
+    7 {
+      1: 1
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 2
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 3
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 4
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 5
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+    7 {
+      1: 6
+      2 {
+        1 {
+          1: "_output_shapes"
+          2 {
+            1 {
+              7: ""
+            }
+          }
+        }
+      }
+    }
+  }
+}
