@@ -34,14 +34,15 @@ output [
 ]
 
 # instance_group [{ kind: KIND_CPU }]
-# instance_group [
-#   {
-#     count: 1
-#     kind: KIND_GPU
-#     gpus: [ 0 ]
-#     # gpus: []
-#     # profile: []
-#   }
+instance_group [
+  {
+    count: 4
+    kind: KIND_GPU
+    gpus: [ 0 ]
+    # gpus: []
+    # profile: []
+  }
+]
 #   {
 #     count: 1
 #     kind: KIND_GPU
@@ -78,3 +79,18 @@ optimization: {
   gather_kernel_buffer_threshold: 0
   eager_batching: false
 }
+
+model_warmup [
+  {
+    name: "warmup"
+    batch_size: 100
+    inputs: {
+        key: "input_1"
+        value: {
+            data_type: TYPE_FP32
+            dims: [ 224,224, 3 ]
+            random_data : True
+        }
+    }
+  }
+]
