@@ -17,7 +17,7 @@ import datetime as dt
 
 
 package_nm = 'runtime_client'
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 base_requires = [
     "argparse >= 1.4.0",
@@ -26,6 +26,7 @@ base_requires = [
     "joblib",
     "numpy",
     "pandas",
+    "numba",
 ]
 
 tests_require = [
@@ -62,7 +63,8 @@ setup(
     url='',
     description='Model Server implementation for AI Runtime.',
     long_description=open('README.md').read(),
-    python_requires='>3.4',
+    long_description_content_type='text/markdown',
+    python_requires='>3.7',
     packages=find_packages(
         exclude=['contrib', 'docs', 'tests'],
     ),

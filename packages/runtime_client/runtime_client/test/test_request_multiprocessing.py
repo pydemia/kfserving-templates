@@ -1,10 +1,12 @@
+from itertools import repeat
 import math
 import threading
 from timeit import repeat
 from runtime_client import KFServingClient, RuntimeClient
 
 import numpy as np
-from functools import partial
+from functools import partial, wraps
+import datetime as dt
 import multiprocessing as mpr
 
 
@@ -63,9 +65,9 @@ def func_np(data):
     """
     resp = infer_func(data=data)
     if resp.ok:
-        return resp
+        return resp.status_code
     else:
-        return ""
+        return 0
 
 
 def timefunc(correct, s, func, *args, **kwargs):
@@ -81,46 +83,84 @@ def timefunc(correct, s, func, *args, **kwargs):
     # time it
     print('{:>5.0f} ms'.format(min(repeat(
         lambda: func(*args, **kwargs), number=5, repeat=2)) * 1000))
-    return res
+    # return res
 
 
-def multiprocessor(func, worker=2, arg_zip=None, *args, **kwargs):
+# def multiprocessor(func, worker, args_iter, kwargs_iter=None):
+#     args_for_starmap = zip(repeat(func), args_iter, kwargs_iter)
+#     with mpr.Pool(processes=worker) as pool:
+#         resp = pool.starmap(timefunc, args_for_starmap)
+
+#     return resp
+def time_profiler(func):
+
+    @wraps(func)
+    def profiler(*args, **kwargs):
+
+        start_tm = dt.datetime.now()
+        print("(%s) Start   : %26s" % (func.__name__, start_tm))
+
+        res = func(*args, **kwargs)
+        end_tm = dt.datetime.now()
+        print("(%s) End     : %26s" % (func.__name__, end_tm))
+
+        elapsed_tm = end_tm - start_tm
+        print("(%s) Elapsed : %26s" % (func.__name__, elapsed_tm))
+        return res
+
+    return profiler
+
+
+@time_profiler
+def multiprocessor(func, worker, arg_zip=None, *args, **kwargs):
     with mpr.Pool(processes=worker) as pool:
         resp = pool.starmap(func, arg_zip, *args, **kwargs)
+
     return resp
+
     # with mpr.Pool(processes=worker) as pool:
     #     resp = pool.starmap(func, arg_zip, *args, **kwargs)
     # return resp
 
-def make_multiprocess(inner_func, numprocesses):
-    def func(arg_zip=None, worker=numprocesses, *args, **kwargs):
-        with mpr.Pool(processes=worker) as pool:
-            resp = pool.starmap(inner_func, arg_zip, *args, **kwargs)
-        return resp
-    return func
+# def make_multiprocess(inner_func, numprocesses):
+#     def func(arg_zip=None, worker=numprocesses, *args, **kwargs):
+#         arg_zip = zip(repeat(func), *args, **kwargs)
+#         with mpr.Pool(processes=worker) as pool:
+#             pool.starmap(inner_func, arg_zip, *args, **kwargs)
+#     return func
 
 
-DATA = np.random.random(size=(BATCH_SIZE, *DATA_SHAPE))
-PARALLEL_DATA = [DATA] * EACH_DATA_NUM
+DATA = [np.random.random(size=(BATCH_SIZE, *DATA_SHAPE))] * EACH_DATA_NUM * CONCURRENCY
+# PARALLEL_DATA = [DATA] * EACH_DATA_NUM
 
 
 # func_nb = make_multiprocess(func_np, 1)
 # func_nb_mt = make_multiprocess(func_np, WORKERS)
 
 # func_nb = partial(multiprocessor, infer_func, 1, arg_zip=zip(PARALLEL_DATA,))
-func_nb_mt = make_multiprocess(func_np, 1)
+# func_nb_mt = make_multiprocess(func_np, 1)
 # func_nb_mt = partial(multiprocessor, infer_func, WORKERS,
 #                      arg_zip=zip(PARALLEL_DATA,))
 
+# arg_zip = zip(repeat(infer_func), data=PARALLEL_DATA)
+# with mpr.Pool(processes=CONCURRENCY) as pool:
+#         pool.starmap(infer_func, *arg_zip)
+
+args_iter = zip(DATA)
+
+# kwargs_iter = repeat(dict(payload={'a': 1}, key=True))
+r = multiprocessor(func_np, worker=CONCURRENCY, arg_zip=zip(DATA,))
+print(len(r))
+
 
 # correct = timefunc(None, "numpy (1 thread)", func_np, DATA)
-func_nb_mt(arg_zip=zip(PARALLEL_DATA,))
+# func_nb_mt(arg_zip=zip(PARALLEL_DATA,))
 # func_nb_mt()
 # timefunc(None, "numpy (1 thread)", func_nb_mt, arg_zip=zip(PARALLEL_DATA,))
 # correct = timefunc(None, "numpy (1 thread)", func_nb_mt, arg_zip=zip(PARALLEL_DATA,))
 # multiprocessor(infer_func, worker=1, arg_zip=zip(PARALLEL_DATA,))
 # timefunc(None, "numpy (1 thread)", func_nb)
-timefunc(None, "multiprocess (1 WORKERS)", 
-         multiprocessor, func_np, worker=1, arg_zip=zip(PARALLEL_DATA,))
-timefunc(None, "multiprocess (%d WORKERS)" % WORKERS,
-         multiprocessor, func_np, worker=100, arg_zip=zip(PARALLEL_DATA,))
+# timefunc(None, "multiprocess (1 WORKERS)", 
+#          multiprocessor, func_np, worker=1, arg_zip=zip(PARALLEL_DATA,))
+# timefunc(None, "multiprocess (%d WORKERS)" % WORKERS,
+#          multiprocessor, func_np, worker=100, arg_zip=zip(PARALLEL_DATA,))
