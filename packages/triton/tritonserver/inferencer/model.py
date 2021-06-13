@@ -20,6 +20,7 @@ from typing import Union, Dict, List
 from .utils import change_ndarray_tolist
 import logging
 
+import re
 import io
 import zlib
 import pickle
@@ -45,7 +46,7 @@ class ServingModel(kfserving.KFModel):  # pylint:disable=c-extension-no-member
 
         if not self.triton_client:
             self.triton_client = httpclient.InferenceServerClient(
-                url=self.triton_host, verbose=True)
+                url=self.triton_host, verbose=False)
 
         self.ready = True
         return self.ready
@@ -68,7 +69,7 @@ class ServingModel(kfserving.KFModel):  # pylint:disable=c-extension-no-member
 
     def _predict_from_bytes(self, request: bytes) -> Dict:
         parsed_request = MultipartRequest(request)
-        filename = parsed_request.filename
+        # filename = parsed_request.filename
         instances: np.ndarray = parsed_request.instances
 
         inputs, outputs = self.parse_instances_from_ndarray(instances)
@@ -130,10 +131,12 @@ class ServingModel(kfserving.KFModel):  # pylint:disable=c-extension-no-member
 
 
 class MultipartRequest:
-    boundary: bytes
-    content_disposition: str
-    name: str
-    filename: str
+    # boundary: bytes
+    # content_disposition: str
+    # content_type: str
+    # name: str
+    # filename: str
+    data_bytes: bytes
     instances: np.ndarray
 
     def __init__(self, request: bytes):
@@ -145,25 +148,37 @@ class MultipartRequest:
         #else:
         #    (_start_boundary, _content_disposition, _,
         #    data_bytes, _end_boundary) = parsed_request
-        _start_boundary, _content_disposition, *_ = [i for i in _info.split(b'\r\n') if i ]
-        self.boundary = _start_boundary.split(b'--')[-1]
+
+        # _info = _info.decode()
+        # matcher = re.compile(r'Content-Type: (?P<content_type>(.+))\r\n')
+        # matched = matcher.search(_info)
+
+        # _content_type = re.findall(r'Content-Type: (.+)\r\n', _info)
+        # self._content_type = _content_type if _content_type else None
+        # _content_disposition = re.findall(
+        #     r'Content-Disposition: (.+)\r\n', _info)
+        # self._content_disposition = _content_disposition[0] if _content_disposition else None
+
         self.data_bytes = data_bytes
-        self.content_disposition, _name, _filename = [
-            i.strip().decode('utf8').replace("'", "").replace('"', '')
-            for i in _content_disposition.split(b';')]
-        self.content_disposition
-        self.name = _name.split('name=')[-1]
-        self.filename = _filename.split('filename=')[-1]
+        # _disp = _content_disposition.replace("'", "").replace('"', '')
+        # _disp = [
+        #     i.strip().replace("'", "").replace('"', '')
+        #     for i in _content_disposition.split(';')]
+        # self.name = [i.split("name=")[-1] for i in _disp if i.startswith("name=")]
+        # self.filename = [i.split("filename=")[-1]
+        #                  for i in _disp if i.startswith("filename=")]
 
         try:
-            if self.filename.endswith('npz') or self.filename.endswith('npy'):
-                npz = np.load(io.BytesIO(data_bytes), allow_pickle=True)
-                self.instances = npz[npz.files[0]]
-            elif self.filename.endswith('pkl'):
-                self.instances = pickle.load(io.BytesIO(data_bytes))
-            else:
-                npz = np.load(io.BytesIO(data_bytes), allow_pickle=True)
-                self.instances = npz[npz.files[0]]
+            npz = np.load(io.BytesIO(data_bytes), allow_pickle=True)
+            self.instances = npz[npz.files[0]]
+            # if self.filename.endswith('npz') or self.filename.endswith('npy'):
+            #     npz = np.load(io.BytesIO(data_bytes), allow_pickle=True)
+            #     self.instances = npz[npz.files[0]]
+            # elif self.filename.endswith('pkl'):
+            #     self.instances = pickle.load(io.BytesIO(data_bytes))
+            # else:
+            #     npz = np.load(io.BytesIO(data_bytes), allow_pickle=True)
+            #     self.instances = npz[npz.files[0]]
         except Exception as e:
             raise Exception(
                 "Unsupported or invalid File Format: " +

@@ -20,4 +20,6 @@ COPY README.md README.md
 RUN pip install --upgrade pip && \
     pip install -e . --no-cache-dir
 
+RUN pip install numba --no-cache-dir
+
 RUN rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
